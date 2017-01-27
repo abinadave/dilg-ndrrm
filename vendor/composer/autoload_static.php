@@ -272,10 +272,12 @@ class ComposerStaticInit93f3cdb5c8f31d50bb363b873cdb2981
     );
 
     public static $classMap = array (
+        'AddColumnTotalCapacityEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
+        'CreateEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_160120_create_evacuations_table.php',
+        'CreateFacilitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_171324_create_facilities_table.php',
         'CreateOfficersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_26_065403_create_officers_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
-        'CreateProvicesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_26_081900_create_provices_table.php',
-        'CreateRescuesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_024444_create_rescues_table.php',
+        'CreateRescueTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_153808_create_rescue_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',

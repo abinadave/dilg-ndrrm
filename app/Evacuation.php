@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rescue extends Model
+class Evacuation extends Model
 {
-    protected $table = 'rescues';
+    protected $table = 'evacuations';
     protected $primaryKey = 'id';
 }
