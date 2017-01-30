@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddColumnTotalCapacityEvacuationsTable' => $baseDir . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
+    'ChangeColumnsFacilitiesTable' => $baseDir . '/database/migrations/2017_01_30_105758_change_columns_facilities_table.php',
     'CreateEvacuationsTable' => $baseDir . '/database/migrations/2017_01_27_160120_create_evacuations_table.php',
     'CreateFacilitiesTable' => $baseDir . '/database/migrations/2017_01_27_171324_create_facilities_table.php',
     'CreateOfficersTable' => $baseDir . '/database/migrations/2017_01_26_065403_create_officers_table.php',

@@ -20,4 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/migrate', 'HomeController@migrate');
+    Route::get('officer/management', 'OfficerController@fetch');
 });

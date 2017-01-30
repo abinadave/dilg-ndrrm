@@ -13,7 +13,7 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
-                <!-- <officer-list></officer-list> -->
+                <officer-list></officer-list>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
                 <create-officer></create-officer>
@@ -28,12 +28,14 @@
 
 <script>
     import CompCreateOfficer from './create-officer.vue'
+    import CompOfficerList   from './officer-list.vue'
     export default {
         mounted() {
            
         },
         components: {
-            'create-officer': CompCreateOfficer
+            'create-officer': CompCreateOfficer,
+            'officer-list': CompOfficerList
         }
     }
 </script>
