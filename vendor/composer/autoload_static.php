@@ -272,8 +272,8 @@ class ComposerStaticInit93f3cdb5c8f31d50bb363b873cdb2981
     );
 
     public static $classMap = array (
+        'AddColumnIdEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_02_144613_add_column_id_evacuations_table.php',
         'AddColumnTotalCapacityEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
-        'ChangeColumnsFacilitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_30_105758_change_columns_facilities_table.php',
         'CreateEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_160120_create_evacuations_table.php',
         'CreateFacilitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_171324_create_facilities_table.php',
         'CreateOfficersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_26_065403_create_officers_table.php',

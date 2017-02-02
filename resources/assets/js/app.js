@@ -22,7 +22,18 @@ const router = new VueRouter({
       path: '/Officers',
       name: 'officers',
       component: require('./components/officer/officer.vue')
-    }
+    },
+    {
+      path: '/Rescue/Team/',
+      name: 'rescues',
+      component: require('./components/rescue/rescue.vue')
+    },
+    {
+      path: '/Evacuations',
+      name: 'evacuation',
+      component: require('./components/evacuation/evacuation.vue')
+    },
+    { path: '/', redirect: '/officers' }
   ]
 });
 
