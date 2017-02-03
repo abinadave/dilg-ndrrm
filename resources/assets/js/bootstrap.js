@@ -43,3 +43,11 @@ window.axios.defaults.headers.common = {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+
+$(function() {
+	$('.navbar-nav').find('li a').click(function(event) {
+		$(this).addClass('clicked-nav')
+		
+	});
+});

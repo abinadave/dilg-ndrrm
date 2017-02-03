@@ -20,6 +20,13 @@
         ]) !!};
     </script>
 </head>
+<style type="text/css">
+    .clicked-nav {
+        font-weight: bolder;
+        font-size: 15px;
+        color: #a94442;
+    }
+</style>
 <body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
@@ -46,6 +53,7 @@
                         <li><router-link :to="{ name: 'officers' }">Officer</router-link></li>
                         <li><router-link :to="{ name: 'rescues' }">Rescue Teams</router-link></li>
                         <li><router-link :to="{ name: 'evacuation' }">Evacuations</router-link></li>
+                        <li><router-link :to="{ name: 'facility' }">Facilities</router-link></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @if (Auth::guest())

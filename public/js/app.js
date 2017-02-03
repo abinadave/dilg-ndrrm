@@ -11599,6 +11599,10 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router___default.a({
     path: '/Evacuations',
     name: 'evacuation',
     component: __webpack_require__(46)
+  }, {
+    path: '/Facilities',
+    name: 'facility',
+    component: __webpack_require__(73)
   }, { path: '/', redirect: '/officers' }]
 });
 
@@ -12505,7 +12509,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = {
     data: function data() {
         return {
-            evacuations: [], search: ''
+            evacuations: [], search: '',
+            searching: false
         };
     },
     mounted: function mounted() {
@@ -12517,17 +12522,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         changeinKeyword: function changeinKeyword() {
             var self = this;
-            console.log(self);
+            clearTimeout(self.timer);
+            self.timer = setTimeout(function () {
+                if (self.search == '') {
+                    self.fetch();
+                }
+            }, 1100);
         },
         searchKeyWord: function searchKeyWord() {
             var self = this;
+            self.searching = true;
             axios.post('/evacuation/search', {
                 keyword: self.search
             }).then(function (response) {
                 if (response.status === 200) {
+                    self.searching = false;
                     self.evacuations = response.data;
                 }
             }).catch(function (error) {
+                self.searching = false;
                 console.log(error);
             });
         },
@@ -12889,7 +12902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery) {
+/* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery, $) {
 window._ = __webpack_require__(45);
 
 /**
@@ -12934,7 +12947,14 @@ window.axios.defaults.headers.common = {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+
+$(function () {
+  $('.navbar-nav').find('li a').click(function (event) {
+    $(this).addClass('clicked-nav');
+  });
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(5)))
 
 /***/ }),
 /* 41 */
@@ -33000,9 +33020,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-default",
+    staticClass: "btn btn-primary btn-sm",
     staticStyle: {
       "display": "inline"
+    },
+    attrs: {
+      "disabled": _vm.searching
     },
     on: {
       "click": _vm.searchKeyWord
@@ -44048,6 +44071,230 @@ module.exports = function(module) {
 __webpack_require__(14);
 module.exports = __webpack_require__(15);
 
+
+/***/ }),
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = {
+    data: function data() {
+        return {
+            facilities: [], search: '',
+            searching: false
+        };
+    },
+    mounted: function mounted() {
+        console.log('Facility.vue is mounted');
+        this.fetch();
+    },
+
+    components: {},
+    methods: {
+        changeinKeyword: function changeinKeyword() {
+            var self = this;
+            clearTimeout(self.timer);
+            self.timer = setTimeout(function () {
+                if (self.search == '') {
+                    self.fetch();
+                }
+            }, 1100);
+        },
+        searchKeyword: function searchKeyword() {
+            var self = this;
+            self.searching = true;
+            axios.post('/facilities/search', {
+                keyword: self.search
+            }).then(function (response) {
+                if (response.status === 200) {
+                    self.searching = false;
+                    self.facilities = response.data;
+                }
+            }).catch(function (error) {
+                self.searching = false;
+                console.log(error);
+            });
+        },
+        fetch: function fetch() {
+            var self = this;
+            axios.post('/facility/management', {
+                pagination: self.pagination
+
+            }).then(function (response) {
+                if (response.status === 200) {
+                    self.facilities = response.data.facilities;
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    computed: {
+        filterRescueTeam: function filterRescueTeam() {
+            var self = this;
+            var value = self.search.toLowerCase();
+            return self.facilities.filter(function (index) {
+                return index.evacuation_center.toLowerCase().indexOf(value) !== -1;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(72),
+  /* template */
+  __webpack_require__(74),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\xampp\\htdocs\\dilg-ndrrm\\resources\\assets\\js\\components\\facility\\facility.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] facility.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-eae729fa", Component.options)
+  } else {
+    hotAPI.reload("data-v-eae729fa", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_c('h3', {
+    staticClass: "panel-title"
+  }, [_vm._v("Facilities " + _vm._s(_vm.facilities.length))])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.search),
+      expression: "search"
+    }],
+    staticClass: "form-control",
+    staticStyle: {
+      "border-radius": "25px",
+      "width": "350px",
+      "display": "inline",
+      "margin-bottom": "8px"
+    },
+    attrs: {
+      "type": "text",
+      "placeholder": "Search rescue team"
+    },
+    domProps: {
+      "value": _vm._s(_vm.search)
+    },
+    on: {
+      "keyup": [_vm.changeinKeyword, function($event) {
+        if (_vm._k($event.keyCode, "enter", 13)) { return; }
+        _vm.searchKeyword($event)
+      }],
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.search = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary btn-sm",
+    staticStyle: {
+      "display": "inline"
+    },
+    attrs: {
+      "disabled": _vm.searching
+    },
+    on: {
+      "click": _vm.searchKeyword
+    }
+  }, [_vm._v("Search")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-hover table-condensed table-bordered"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.facilities), function(facility) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(facility.facility_category))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.facility_description))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.location))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.total_facility))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.person_responsible))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.mobile_no))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.landline_no))])])
+  }))])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', [_vm._v("Facility Cateogory")]), _vm._v(" "), _c('th', [_vm._v("Facility Description")]), _vm._v(" "), _c('th', [_vm._v("Location")]), _vm._v(" "), _c('th', [_vm._v("Total Facility")]), _vm._v(" "), _c('th', [_vm._v("Person Responsible")]), _vm._v(" "), _c('th', [_vm._v("Mobile No.")]), _vm._v(" "), _c('th', [_vm._v("Landline No.")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-eae729fa", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

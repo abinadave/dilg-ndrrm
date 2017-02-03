@@ -33,6 +33,11 @@ const router = new VueRouter({
       name: 'evacuation',
       component: require('./components/evacuation/evacuation.vue')
     },
+    {
+      path: '/Facilities',
+      name: 'facility',
+      component: require('./components/facility/facility.vue')
+    },
     { path: '/', redirect: '/officers' }
   ]
 });
