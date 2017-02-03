@@ -23,4 +23,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('officer/management', 'OfficerController@fetch');
     Route::get('rescue/management', 'RescueController@fetch');
     Route::post('evacuation/management', 'EvacuationController@fetch');
+    Route::post('evacuation/search', 'EvacuationController@search');
 });

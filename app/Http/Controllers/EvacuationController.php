@@ -9,19 +9,22 @@ use DB;
 class EvacuationController extends Controller
 {
     public function fetch(Request $request){
-    	$pagination = $request->input('pagination');
-    	$count = DB::table("evacuations")->count();
-    	$data = DB::select("SELECT * FROM evacuations ORDER BY id DESC limit ?, ?", 
-    	[
-    		$pagination['to'],
-    		$pagination['per_page']
-    	]);
     	return response()->json([
-    		'data' => $data,
-    		'per_page' => $pagination['per_page'],
-    		'to' => $pagination['to'] + 50,
-    		'total' => $count
+    		'evacuations' => Evacuation::orderBy('id','desc')->get()
     	]);
     }
 
+    public function search(Request $request){
+    	$keyword = $request->input('keyword');
+    	$evacations = Evacuation::where('evacuation_center', 'like', '%'. $keyword .'%')
+    				  ->orWhere('location', 'like', '%'. $keyword .'%')
+    				  ->orWhere('floor_area', 'like', '%'. $keyword .'%')
+    				  ->orWhere('total_capacity', 'like', '%'. $keyword .'%')
+    				  ->orWhere('male', 'like', '%'. $keyword .'%')
+    				  ->orWhere('female', 'like', '%'. $keyword .'%')
+    				  ->orWhere('potable', 'like', '%'. $keyword .'%')
+    				  ->orWhere('non_potable', 'like', '%'. $keyword .'%')
+    				  ->get();
+    	return $evacations;
+    }
 }

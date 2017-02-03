@@ -5,7 +5,8 @@
             <h3 class="panel-title">Evacuation Centers {{ evacuations.length }}</h3>
           </div>
           <div class="panel-body">
-             <input type="text" v-model="search" class="form-control" style="border-radius: 25px; width: 350px; margin-bottom: 8px" placeholder="Search rescue team">
+             <input @keyup="changeinKeyword" @keyup.enter="searchKeyWord" type="text" v-model="search" class="form-control" style="border-radius: 25px; width: 350px; display: inline; margin-bottom: 8px" placeholder="Search rescue team">
+             <button @click="searchKeyWord" class="btn btn-default" style="display: inline">Search</button>
              <table class="table table-hover table-condensed table-bordered">
                  <thead>
                      <tr>
@@ -32,28 +33,18 @@
                      </tr>
                  </tbody>
              </table>
-             <pagination-buttons :pagination="pagination"></pagination-buttons>
+            
           </div>
         </div>
     </div>
 </template>
-<style type="text/css">
-    .right {
-        text-align: right;
-    }
-</style>
+
 <script>
-    import CompPaginationButton from './evacuation-buttons.vue'
+    
     export default {
         data(){
             return {
-                evacuations: [], search: '',
-                pagination: {
-                    to: 50,
-                    per_page: 15,
-                    last_page: 0,
-                    total: 0,
-                }
+                evacuations: [], search: ''
             }
         },
         mounted() {
@@ -61,9 +52,27 @@
            this.fetch();
         },
         components: {
-           'pagination-buttons': CompPaginationButton
+          
         },
         methods: {
+            changeinKeyword(){
+                let self = this;
+                cleareee
+            },
+            searchKeyWord(){
+                let self = this;
+                axios.post('/evacuation/search', {
+                    keyword: self.search
+                })
+                .then(function (response) {
+                    if (response.status === 200) {
+                        self.evacuations = response.data;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
             fetch(){
                 let self = this;
                 axios.post('/evacuation/management', {
@@ -71,10 +80,7 @@
 
                 }).then(function (response) {
                     if (response.status === 200) {
-                        let json = response.data;
-                        self.evacuations = json.data;
-                        self.pagination.total = json.total;
-                        self.pagination.to = json.to;
+                        self.evacuations = response.data.evacuations;
                     }
                 })
                 .catch(function (error) {
@@ -85,7 +91,10 @@
         computed: {
             filterRescueTeam(){
                 let self = this;
-                
+                let value = self.search.toLowerCase();
+                return self.evacuations.filter(function(index) {
+                    return index.evacuation_center.toLowerCase().indexOf(value) !== -1;
+                });
             }
         }
     }

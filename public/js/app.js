@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 61);
+/******/ 	return __webpack_require__(__webpack_require__.s = 64);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11015,7 +11015,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(58)
+var listToStyles = __webpack_require__(61)
 
 /*
 type StyleObject = {
@@ -11502,13 +11502,13 @@ module.exports = function bind(fn, thisArg) {
 
 
 /* styles */
-__webpack_require__(55)
+__webpack_require__(58)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(34),
+  __webpack_require__(35),
   /* template */
-  __webpack_require__(49),
+  __webpack_require__(51),
   /* scopeId */
   null,
   /* cssModules */
@@ -11567,7 +11567,7 @@ module.exports = g;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_router__);
 
 /**
@@ -11578,7 +11578,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__webpack_require__(39);
+__webpack_require__(40);
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router___default.a);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -11590,15 +11590,15 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router___default.a({
   routes: [{
     path: '/Officers',
     name: 'officers',
-    component: __webpack_require__(46)
+    component: __webpack_require__(48)
   }, {
     path: '/Rescue/Team/',
     name: 'rescues',
-    component: __webpack_require__(48)
+    component: __webpack_require__(50)
   }, {
     path: '/Evacuations',
     name: 'evacuation',
-    component: __webpack_require__(72)
+    component: __webpack_require__(46)
   }, { path: '/', redirect: '/officers' }]
 });
 
@@ -12459,7 +12459,110 @@ module.exports = function spread(callback) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__province_create_province_vue__ = __webpack_require__(47);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = {
+    data: function data() {
+        return {
+            evacuations: [], search: ''
+        };
+    },
+    mounted: function mounted() {
+        console.log('Evacuation.vue is mounted');
+        this.fetch();
+    },
+
+    components: {},
+    methods: {
+        changeinKeyword: function changeinKeyword() {
+            var self = this;
+            console.log(self);
+        },
+        searchKeyWord: function searchKeyWord() {
+            var self = this;
+            axios.post('/evacuation/search', {
+                keyword: self.search
+            }).then(function (response) {
+                if (response.status === 200) {
+                    self.evacuations = response.data;
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        fetch: function fetch() {
+            var self = this;
+            axios.post('/evacuation/management', {
+                pagination: self.pagination
+
+            }).then(function (response) {
+                if (response.status === 200) {
+                    self.evacuations = response.data.evacuations;
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    computed: {
+        filterRescueTeam: function filterRescueTeam() {
+            var self = this;
+            var value = self.search.toLowerCase();
+            return self.evacuations.filter(function (index) {
+                return index.evacuation_center.toLowerCase().indexOf(value) !== -1;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__province_create_province_vue__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__province_create_province_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__province_create_province_vue__);
 //
 //
@@ -12517,7 +12620,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12613,14 +12716,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__create_officer_vue__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__create_officer_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__create_officer_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__officer_list_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__officer_list_vue__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__officer_list_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__officer_list_vue__);
 //
 //
@@ -12663,7 +12766,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12707,7 +12810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12783,11 +12886,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 };
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery) {
-window._ = __webpack_require__(44);
+window._ = __webpack_require__(45);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -12797,7 +12900,7 @@ window._ = __webpack_require__(44);
 
 window.$ = __webpack_provided_window_dot_jQuery = __webpack_require__(5);
 
-__webpack_require__(40);
+__webpack_require__(41);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -12805,7 +12908,7 @@ __webpack_require__(40);
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = __webpack_require__(59);
+window.Vue = __webpack_require__(62);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -12834,7 +12937,7 @@ window.axios.defaults.headers.common = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*!
@@ -15218,20 +15321,6 @@ if (typeof jQuery === 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.panel-officer {\n   margin-top: 10px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15254,13 +15343,27 @@ exports = module.exports = __webpack_require__(4)();
 
 
 // module
-exports.push([module.i, "\n.table-officers {\n    font-size: 12px;\n    margin-top: 20px;\n}\n#div-search {\n    padding: 20px;\n    margin-left: -10px;\n}\n#div-search input {\n    border-radius: 30px;\n}\n", ""]);
+exports.push([module.i, "\n.panel-officer {\n   margin-top: 10px;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)();
+// imports
+
+
+// module
+exports.push([module.i, "\n.table-officers {\n    font-size: 12px;\n    margin-top: 20px;\n}\n#div-search {\n    padding: 20px;\n    margin-left: -10px;\n}\n#div-search input {\n    border-radius: 30px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -32349,21 +32452,55 @@ exports.push([module.i, "\n.table-officers {\n    font-size: 12px;\n    margin-t
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(60)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(63)(module)))
 
 /***/ }),
-/* 45 */
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(34),
+  /* template */
+  __webpack_require__(56),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\xampp\\htdocs\\dilg-ndrrm\\resources\\assets\\js\\components\\evacuation\\evacuation.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] evacuation.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9af2f17a", Component.options)
+  } else {
+    hotAPI.reload("data-v-9af2f17a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(57)
+__webpack_require__(60)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(35),
+  __webpack_require__(36),
   /* template */
-  __webpack_require__(52),
+  __webpack_require__(54),
   /* scopeId */
   null,
   /* cssModules */
@@ -32390,14 +32527,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(36),
+  __webpack_require__(37),
   /* template */
-  __webpack_require__(53),
+  __webpack_require__(55),
   /* scopeId */
   null,
   /* cssModules */
@@ -32424,18 +32561,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(56)
+__webpack_require__(59)
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(37),
+  __webpack_require__(38),
   /* template */
-  __webpack_require__(50),
+  __webpack_require__(52),
   /* scopeId */
   null,
   /* cssModules */
@@ -32462,14 +32599,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(38),
+  __webpack_require__(39),
   /* template */
-  __webpack_require__(51),
+  __webpack_require__(53),
   /* scopeId */
   null,
   /* cssModules */
@@ -32496,7 +32633,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32546,7 +32683,7 @@ if (false) {
 }
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32601,7 +32738,7 @@ if (false) {
 }
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32675,7 +32812,7 @@ if (false) {
 }
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32722,7 +32859,7 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32817,7 +32954,93 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_c('h3', {
+    staticClass: "panel-title"
+  }, [_vm._v("Evacuation Centers " + _vm._s(_vm.evacuations.length))])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.search),
+      expression: "search"
+    }],
+    staticClass: "form-control",
+    staticStyle: {
+      "border-radius": "25px",
+      "width": "350px",
+      "display": "inline",
+      "margin-bottom": "8px"
+    },
+    attrs: {
+      "type": "text",
+      "placeholder": "Search rescue team"
+    },
+    domProps: {
+      "value": _vm._s(_vm.search)
+    },
+    on: {
+      "keyup": [_vm.changeinKeyword, function($event) {
+        if (_vm._k($event.keyCode, "enter", 13)) { return; }
+        _vm.searchKeyWord($event)
+      }],
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.search = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default",
+    staticStyle: {
+      "display": "inline"
+    },
+    on: {
+      "click": _vm.searchKeyWord
+    }
+  }, [_vm._v("Search")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-hover table-condensed table-bordered"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.evacuations), function(evacuation) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(evacuation.evacuation_center))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.location))]), _vm._v(" "), _c('td', {
+      staticClass: "right"
+    }, [_vm._v(_vm._s(evacuation.floor_area))]), _vm._v(" "), _c('td', {
+      staticClass: "right"
+    }, [_vm._v(_vm._s(evacuation.total_capacity))]), _vm._v(" "), _c('td', {
+      staticClass: "right"
+    }, [_vm._v(_vm._s(evacuation.male))]), _vm._v(" "), _c('td', {
+      staticClass: "right"
+    }, [_vm._v(_vm._s(evacuation.female))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.potable))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.non_potable))])])
+  }))])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', [_vm._v("Evacuation Center")]), _vm._v(" "), _c('th', [_vm._v("Location")]), _vm._v(" "), _c('th', {
+    staticClass: "right"
+  }, [_vm._v("Floor Area")]), _vm._v(" "), _c('th', {
+    staticClass: "right"
+  }, [_vm._v("Total Capacity")]), _vm._v(" "), _c('th', {
+    staticClass: "right"
+  }, [_vm._v("Male")]), _vm._v(" "), _c('th', {
+    staticClass: "right"
+  }, [_vm._v("Female")]), _vm._v(" "), _c('th', [_vm._v("Potable")]), _vm._v(" "), _c('th', [_vm._v("Non Potable")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-9af2f17a", module.exports)
+  }
+}
+
+/***/ }),
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35104,13 +35327,13 @@ module.exports = VueRouter;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
+var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -35130,13 +35353,13 @@ if(false) {
 }
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -35156,13 +35379,13 @@ if(false) {
 }
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -35182,7 +35405,7 @@ if(false) {
 }
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports) {
 
 /**
@@ -35215,7 +35438,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43791,7 +44014,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(13)))
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -43819,459 +44042,12 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(14);
 module.exports = __webpack_require__(15);
 
-
-/***/ }),
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__evacuation_buttons_vue__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__evacuation_buttons_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__evacuation_buttons_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = {
-    data: function data() {
-        return {
-            evacuations: [], search: '',
-            pagination: {
-                to: 50,
-                per_page: 15,
-                last_page: 0,
-                total: 0
-            }
-        };
-    },
-    mounted: function mounted() {
-        console.log('Evacuation.vue is mounted');
-        this.fetch();
-    },
-
-    components: {
-        'pagination-buttons': __WEBPACK_IMPORTED_MODULE_0__evacuation_buttons_vue___default.a
-    },
-    methods: {
-        fetch: function fetch() {
-            var self = this;
-            axios.post('/evacuation/management', {
-                pagination: self.pagination
-
-            }).then(function (response) {
-                if (response.status === 200) {
-                    var json = response.data;
-                    self.evacuations = json.data;
-                    self.pagination.total = json.total;
-                    self.pagination.to = json.to;
-                }
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-    },
-    computed: {
-        filterRescueTeam: function filterRescueTeam() {
-            var self = this;
-        }
-    }
-};
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(75)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(71),
-  /* template */
-  __webpack_require__(73),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\xampp\\htdocs\\dilg-ndrrm\\resources\\assets\\js\\components\\evacuation\\evacuation.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] evacuation.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9af2f17a", Component.options)
-  } else {
-    hotAPI.reload("data-v-9af2f17a", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_c('h3', {
-    staticClass: "panel-title"
-  }, [_vm._v("Evacuation Centers " + _vm._s(_vm.evacuations.length))])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.search),
-      expression: "search"
-    }],
-    staticClass: "form-control",
-    staticStyle: {
-      "border-radius": "25px",
-      "width": "350px",
-      "margin-bottom": "8px"
-    },
-    attrs: {
-      "type": "text",
-      "placeholder": "Search rescue team"
-    },
-    domProps: {
-      "value": _vm._s(_vm.search)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.search = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _c('table', {
-    staticClass: "table table-hover table-condensed table-bordered"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.evacuations), function(evacuation) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(evacuation.evacuation_center))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.location))]), _vm._v(" "), _c('td', {
-      staticClass: "right"
-    }, [_vm._v(_vm._s(evacuation.floor_area))]), _vm._v(" "), _c('td', {
-      staticClass: "right"
-    }, [_vm._v(_vm._s(evacuation.total_capacity))]), _vm._v(" "), _c('td', {
-      staticClass: "right"
-    }, [_vm._v(_vm._s(evacuation.male))]), _vm._v(" "), _c('td', {
-      staticClass: "right"
-    }, [_vm._v(_vm._s(evacuation.female))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.potable))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(evacuation.non_potable))])])
-  }))]), _vm._v(" "), _c('pagination-buttons', {
-    attrs: {
-      "pagination": _vm.pagination
-    }
-  })], 1)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Evacuation Center")]), _vm._v(" "), _c('th', [_vm._v("Location")]), _vm._v(" "), _c('th', {
-    staticClass: "right"
-  }, [_vm._v("Floor Area")]), _vm._v(" "), _c('th', {
-    staticClass: "right"
-  }, [_vm._v("Total Capacity")]), _vm._v(" "), _c('th', {
-    staticClass: "right"
-  }, [_vm._v("Male")]), _vm._v(" "), _c('th', {
-    staticClass: "right"
-  }, [_vm._v("Female")]), _vm._v(" "), _c('th', [_vm._v("Potable")]), _vm._v(" "), _c('th', [_vm._v("Non Potable")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-9af2f17a", module.exports)
-  }
-}
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.right {\n    text-align: right;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(74);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(6)("30f2b3c5", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-9af2f17a!./../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./evacuation.vue", function() {
-     var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-9af2f17a!./../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./evacuation.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 76 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = {
-    props: {
-        pagination: {
-            type: Object
-        }
-    },
-    data: function data() {
-        return {};
-    },
-    mounted: function mounted() {},
-
-    components: {},
-    computed: {
-        totalButtons: function totalButtons() {
-            var self = this;
-            // return 100 / 15;
-        }
-    }
-
-};
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.right {\n    text-align: right;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(80)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(76),
-  /* template */
-  __webpack_require__(79),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\xampp\\htdocs\\dilg-ndrrm\\resources\\assets\\js\\components\\evacuation\\evacuation-buttons.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] evacuation-buttons.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7b67d4f7", Component.options)
-  } else {
-    hotAPI.reload("data-v-7b67d4f7", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._v("\n" + _vm._s(_vm.pagination.total) + "\n   "), _c('nav', {
-    attrs: {
-      "aria-label": "Page navigation"
-    }
-  }, [_c('ul', {
-    staticClass: "pagination"
-  }, [_vm._m(0), _vm._v(" "), _vm._l((_vm.totalButtons), function(n) {
-    return _c('li', [_c('a', {
-      attrs: {
-        "href": "#"
-      }
-    }, [_vm._v("1")])])
-  }), _vm._v(" "), _vm._m(1)], 2)])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', [_c('a', {
-    attrs: {
-      "href": "#",
-      "aria-label": "Previous"
-    }
-  }, [_c('span', {
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }, [_vm._v("«")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', [_c('a', {
-    attrs: {
-      "href": "#",
-      "aria-label": "Next"
-    }
-  }, [_c('span', {
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }, [_vm._v("»")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-7b67d4f7", module.exports)
-  }
-}
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(77);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(6)("5e595e66", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-7b67d4f7!./../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./evacuation-buttons.vue", function() {
-     var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-7b67d4f7!./../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./evacuation-buttons.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
