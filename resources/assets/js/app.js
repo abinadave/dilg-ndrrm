@@ -7,9 +7,10 @@
 
 
 import VueRouter from 'vue-router'
-
+import VueResource from 'vue-resource'
 require('./bootstrap');
 Vue.use(VueRouter);
+Vue.use(VueResource)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -37,6 +38,16 @@ const router = new VueRouter({
       path: '/Facilities',
       name: 'facility',
       component: require('./components/facility/facility.vue')
+    },
+    {
+      path: '/Manage/Province',
+      name: 'manage-province',
+      component: require('./components/manage/province/manage-province.vue')
+    },
+    {
+      path: '/Manage/City-Municipality',
+      name: 'manage-city-municipality',
+      component: require('./components/manage/city-municipality/manage-city-municipality.vue')
     },
     { path: '/', redirect: '/officers' }
   ]

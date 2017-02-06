@@ -33,7 +33,7 @@
         	saveProvince(){
         		let self = this;
         		self.$http.post('/provice').then((resp) => {
-
+                    console.log(resp)
         		}, () => {
 
         		})

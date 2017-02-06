@@ -13,7 +13,7 @@
                          <th>Rescue Capability</th>
                          <th width="200" class="text-center">Hotline No.</th>
                          <th>Team Leader</th>
-                         <th style="text-align: center">Man Power</th>
+                         <th style="text-align: center">Manpower</th>
                      </tr>
                  </thead>
                  <tbody>

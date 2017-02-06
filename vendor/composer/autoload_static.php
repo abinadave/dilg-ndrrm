@@ -274,10 +274,12 @@ class ComposerStaticInit93f3cdb5c8f31d50bb363b873cdb2981
     public static $classMap = array (
         'AddColumnIdEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_02_144613_add_column_id_evacuations_table.php',
         'AddColumnTotalCapacityEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
+        'CreateCityMunicipalitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_06_080506_create_city_municipalities_table.php',
         'CreateEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_160120_create_evacuations_table.php',
         'CreateFacilitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_171324_create_facilities_table.php',
         'CreateOfficersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_26_065403_create_officers_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+        'CreateProvincesTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_06_075302_create_provinces_table.php',
         'CreateRescueTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_153808_create_rescue_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',

@@ -8,10 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddColumnIdEvacuationsTable' => $baseDir . '/database/migrations/2017_02_02_144613_add_column_id_evacuations_table.php',
     'AddColumnTotalCapacityEvacuationsTable' => $baseDir . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
+    'CreateCityMunicipalitiesTable' => $baseDir . '/database/migrations/2017_02_06_080506_create_city_municipalities_table.php',
     'CreateEvacuationsTable' => $baseDir . '/database/migrations/2017_01_27_160120_create_evacuations_table.php',
     'CreateFacilitiesTable' => $baseDir . '/database/migrations/2017_01_27_171324_create_facilities_table.php',
     'CreateOfficersTable' => $baseDir . '/database/migrations/2017_01_26_065403_create_officers_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateProvincesTable' => $baseDir . '/database/migrations/2017_02_06_075302_create_provinces_table.php',
     'CreateRescueTable' => $baseDir . '/database/migrations/2017_01_27_153808_create_rescue_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',

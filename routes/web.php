@@ -26,4 +26,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('evacuation/search', 'EvacuationController@search');
     Route::post('facility/management', 'FacilityController@fetch');
     Route::post('facilities/search', 'FacilityController@search');
+    Route::post('province', 'ProvinceController@insert');
+    Route::get('province/management', 'ProvinceController@fetchAdmin');
+    Route::post('city/municipality', 'CityMunicipalityController@insert');
+    Route::get('city/management', 'CityMunicipalityController@fetch');
 });
