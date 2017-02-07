@@ -20,7 +20,7 @@
                                 <form-create-province @provinceadded="createProvince"></form-create-province>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="settings">
-                                <list-of-provinces :provinces="provinces"></list-of-provinces>
+                                <list-of-provinces :provinces="provinces" :city-municipalities="city_municipalities"></list-of-provinces>
                             </div>
                           </div>
 
@@ -38,7 +38,7 @@
     export default {
         data(){
             return {
-                provinces: []
+                provinces: [], city_municipalities: []
             }
         },
         mounted() {
@@ -63,6 +63,7 @@
                     if (response.status === 200) {
                         let json = response.data;
                         self.provinces = json.provinces;
+                        self.city_municipalities = json.city_municipalities;
                     }
                 })
                 .catch(function (error) {

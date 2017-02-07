@@ -12808,7 +12808,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = {
     data: function data() {
         return {
-            provinces: []
+            provinces: [], city_municipalities: []
         };
     },
     mounted: function mounted() {
@@ -12833,6 +12833,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (response.status === 200) {
                     var json = response.data;
                     self.provinces = json.provinces;
+                    self.city_municipalities = json.city_municipalities;
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -33785,7 +33786,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('list-of-provinces', {
     attrs: {
-      "provinces": _vm.provinces
+      "provinces": _vm.provinces,
+      "city-municipalities": _vm.city_municipalities
     }
   })], 1)])])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -45115,6 +45117,8 @@ module.exports = __webpack_require__(15);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 //
 //
 //
@@ -45139,6 +45143,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = {
     mounted: function mounted() {
@@ -45148,9 +45155,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: {
         provinces: {
             type: Array
+        },
+        cityMunicipalities: {
+            type: Array
         }
     },
-    methods: {}
+    methods: {
+        countCoveredCities: function countCoveredCities(province) {
+            var self = this;
+            return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.cityMunicipalities, { province_id: province.id }).length;
+        }
+    }
 };
 
 /***/ }),
@@ -45201,10 +45216,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('table', {
     staticClass: "table table-hover"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.provinces), function(province) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(province.name.toUpperCase()))]), _vm._v(" "), _c('td', [_vm._v("0%")])])
+    return _c('tr', [_c('td', [_vm._v(_vm._s(province.name.toUpperCase()))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.countCoveredCities(province)))]), _vm._v(" "), _c('td', [_vm._v("0%")])])
   }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Province name")]), _vm._v(" "), _c('th', [_vm._v("Percentage")])])])
+  return _c('thead', [_c('tr', [_c('th', [_vm._v("Province name")]), _vm._v(" "), _c('th', [_vm._v("Cities/Municipalities")]), _vm._v(" "), _c('th', [_vm._v("Percentage")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
