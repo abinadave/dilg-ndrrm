@@ -15,10 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('server/info', function(){
+    echo phpinfo();
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('city/management', 'CityMunicipalityController@fetch');
     Route::get('/migrate', 'HomeController@migrate');
     Route::get('officer/management', 'OfficerController@fetch');
     Route::get('rescue/management', 'RescueController@fetch');
@@ -29,5 +34,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('province', 'ProvinceController@insert');
     Route::get('province/management', 'ProvinceController@fetchAdmin');
     Route::post('city/municipality', 'CityMunicipalityController@insert');
-    Route::get('city/management', 'CityMunicipalityController@fetch');
+
 });

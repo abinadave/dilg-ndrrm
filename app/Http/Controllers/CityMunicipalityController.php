@@ -22,7 +22,11 @@ class CityMunicipalityController extends Controller
     public function fetch(){
         return response()->json([
             'provinces' => Province::orderBy('id','desc')->get(),
-            'city_municipalities' => City::orderBy('name')->get()
+            'city_municipalities' => City::orderBy('name')->get(),
+            'officers' => \App\Officer::all(),
+            'rescues'  => \App\Rescue::all(),
+            'evacuations' => \App\Evacuation::all(),
+            'facilities'  => \App\Facility::all()
         ]);
     }
 }
