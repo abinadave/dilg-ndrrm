@@ -17,7 +17,7 @@ Vue.use(VueResource)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const router = new VueRouter({
+window.router = new VueRouter({
   routes: [
     {
       path: '/Officers',
@@ -48,6 +48,10 @@ const router = new VueRouter({
       path: '/Manage/City-Municipality',
       name: 'manage-city-municipality',
       component: require('./components/manage/city-municipality/manage-city-municipality.vue')
+    },
+    {
+      path: '/Manage/City-Municipality/:id',
+      component: require('./components/city_all_tabs.vue')
     },
     { path: '/', redirect: '/officers' }
   ]

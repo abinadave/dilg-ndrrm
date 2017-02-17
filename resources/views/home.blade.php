@@ -11,11 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="/css/app.css" rel="stylesheet">
-    <link href="/css/toastr.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -32,7 +28,7 @@
 </style>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-inverse navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -101,5 +97,10 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link href="/css/app.css" rel="stylesheet">
+    <link href="/css/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.min.css">
+    
 </body>
 </html>

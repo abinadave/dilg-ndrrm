@@ -34,5 +34,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('province', 'ProvinceController@insert');
     Route::get('province/management', 'ProvinceController@fetchAdmin');
     Route::post('city/municipality', 'CityMunicipalityController@insert');
+    Route::get('Provinces/All/Tabs/{id}', 'ProvinceController@fetchAlltabs');
 
 });

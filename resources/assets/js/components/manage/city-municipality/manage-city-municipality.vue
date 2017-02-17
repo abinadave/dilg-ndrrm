@@ -18,11 +18,13 @@
 
                           <!-- Tab panes -->
                           <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="settings">
+                            <div role="tabpanel" class="tabpanel-pane active" id="settings">
                                 <list-of-cities 
                                 :officers="officers"
                                 :rescues="rescues"
                                 :provinces="provinces" 
+                                :evacuations="evacuations"
+                                :facilities="facilities"
                                 :city-municipalities="city_municipalities"></list-of-cities>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="messages">

@@ -24,4 +24,10 @@ class ProvinceController extends Controller
             'city_municipalities' => City::orderBy('name')->get()
     	]);
     }
+    public function fetchAlltabs($id){
+        return response()->json([
+            'province' => Province::where('id', $id)->first()
+
+        ]);
+    }
 }
