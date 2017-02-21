@@ -26,7 +26,11 @@ class ProvinceController extends Controller
     }
     public function fetchAlltabs($id){
         return response()->json([
-            'province' => Province::where('id', $id)->first()
+            'province' => Province::where('id', $id)->first(),
+            'officers' => \App\Officer::where('province_id', $id)->get(),
+            'rescues' => \App\Rescue::where('province_id', $id)->get(),
+            'evacuations' => \App\Evacuation::where('province_id', $id)->get(),
+            'facilities' => \App\Facility::where('province_id', $id)->get(),
 
         ]);
     }

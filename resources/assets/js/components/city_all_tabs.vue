@@ -1,6 +1,6 @@
 <template>
 
-        <div class="container">
+        <div class="col-md-12">
             <h3 class="page-header">
               <span>Province: </span>
               <span class="text-primary">
@@ -17,8 +17,12 @@
 
             <!-- Tab panes -->
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane active" id="home">...</div>
-              <div role="tabpanel" class="tab-pane" id="profile">...</div>
+              <div role="tabpanel" class="tab-pane active" id="home">
+                 <officers-list :officers="officers"></officers-list>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="profile">
+                 
+              </div>
               <div role="tabpanel" class="tab-pane" id="messages">...</div>
               <div role="tabpanel" class="tab-pane" id="settings">...</div>
             </div>
@@ -29,17 +33,27 @@
 </template>
 
 <script>
+    import CompTblOfficer from './officer/list-of-officer-in-tabs.vue'
     export default {
         data(){
            return {
               provinceId: 0,
-              province: { name: 'Waiting....', id: 0 }
+              province: { name: 'Waiting....', id: 0 },
+              officers: [], rescues: [], evacuations: [], facilities: []
            }
+        },
+        components: {
+            'officers-list': CompTblOfficer
         },
         mounted() {
            this.setProvinceId();
+           this.fetchCityProvinces();
         },
         methods: {
+            fetchCityProvinces(){
+                let self = this;
+                self.$http.get('/')
+            },
             setProvinceId(){
                let self = this;
                let provinceId = router.currentRoute.fullPath.split('/').pop();
@@ -54,6 +68,10 @@
                     if (resp.status === 200) {
                         let json = resp.body;
                         self.province = json.province;
+                        self.officers = json.officers;
+                        self.rescues = json.rescues;
+                        self.evacuations = json.evacuations;
+                        self.facilities = json.facilities;
                     }
                 }, (resp) => {
 
