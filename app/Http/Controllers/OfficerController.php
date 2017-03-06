@@ -22,14 +22,15 @@ class OfficerController extends Controller
 	private function saveOfficer($request){
 		$officer = new Officer;
 		$officer->drrm_officer = $request->input('drrm_officer');
-		$officer->province_id = $request->input('province');
-		$officer->municipality_id = $request->input('city_municipality');
+		$officer->province = $request->input('province');
+		$officer->city_municipality = $request->input('city_municipality');
 		$officer->mobile_no = $request->input('mobile_no');
 		$officer->landline_no = $request->input('landline_no');
 		$officer->emnail_address = $request->input('email_address');
 		$officer->radio_frequency = $request->input('radio_frequency');
 		$officer->call_sign = $request->input('call_sign');
 		$officer->save();
+		return $officer;
 	}
     public function fetch(){
     	return response()->json([

@@ -7,11 +7,11 @@
               <div class="panel-heading">Officer</div>
                 <div class="panel-body">
                      <form @submit.prevent="submitOfficer">
-                        <div class="form-group col-md-5">
+                        <div :class="{'form-group col-md-5': true, 'has-error': errors.drrm_officer }">
                           <label class="control-label" for="inputWarning1">RDRRM Officer</label>
                           <input v-model="drrmOfficer" type="text" class="form-control" id="inputWarning1">
                         </div>
-                        <div class="form-group col-md-5">
+                        <div :class="{'form-group col-md-5': true, 'has-error': errors.province }">
                           <label class="control-label" for="inputWarning1">Province</label>
                           <select v-model="province" class="form-control">
                               <option :value="province.id" v-for="province in provinces">
@@ -19,9 +19,9 @@
                               </option>
                           </select>
                         </div>
-                        <div class="form-group col-md-5">
+                        <div :class="{'form-group col-md-5': true, 'has-error': errors.city_municipality }">
                           <label class="control-label" for="inputWarning1">City/Municipality</label>
-                          <select v-model="city" class="form-control">
+                          <select v-model="cityMunicipality" class="form-control">
                               <option :value="city.id" v-for="city in cities">
                                   {{ city.name }}
                               </option>
@@ -68,7 +68,7 @@
 </style>
 <script>
     import CompCreateProvince from '../province/create-province.vue'
-    
+    import toastr from 'toastr'
     export default {
         mounted() {
             this.fetchProvince();
@@ -82,7 +82,7 @@
                 cities: [],
                 drrmOfficer: '',
                 province: '',
-                city: '',
+                cityMunicipality: '',
                 mobileNo: '',
                 landlineNo: '',
                 email: '',
@@ -107,17 +107,20 @@
                 let form = {
                     drrm_officer: self.drrmOfficer,
                     province: self.province,
-                    city_municipality: self.city,
+                    city_municipality: self.cityMunicipality,
                     mobile_no: self.mobileNo,
                     landline_no: self.landlineNo,
                     email_address: self.email,
                     radio_frequency: self.radioFreq,
                     call_sign: self.callSign
                 };
+                console.log(form)
                 self.$http.post('/officer', form).then((resp) => {
                     if (resp.status === 200) {
                         let json = resp.body;
-                        console.log(json)
+                        if (json.id) {
+                            toastr.success('new officer added.');
+                        }
                     }
                 }, (resp) => {
                     if (resp.status === 422) {

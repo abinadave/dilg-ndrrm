@@ -46289,6 +46289,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__province_create_province_vue__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__province_create_province_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__province_create_province_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_toastr__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -46378,7 +46380,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             cities: [],
             drrmOfficer: '',
             province: '',
-            city: '',
+            cityMunicipality: '',
             mobileNo: '',
             landlineNo: '',
             email: '',
@@ -46401,17 +46403,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var form = {
                 drrm_officer: self.drrmOfficer,
                 province: self.province,
-                city_municipality: self.city,
+                city_municipality: self.cityMunicipality,
                 mobile_no: self.mobileNo,
                 landline_no: self.landlineNo,
                 email_address: self.email,
                 radio_frequency: self.radioFreq,
                 call_sign: self.callSign
             };
+            console.log(form);
             self.$http.post('/officer', form).then(function (resp) {
                 if (resp.status === 200) {
                     var json = resp.body;
-                    console.log(json);
+                    if (json.id) {
+                        __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.success('new officer added.');
+                    }
                 }
             }, function (resp) {
                 if (resp.status === 422) {
@@ -50774,7 +50779,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   }, [_c('div', {
-    staticClass: "form-group col-md-5"
+    class: {
+      'form-group col-md-5': true, 'has-error': _vm.errors.drrm_officer
+    }
   }, [_c('label', {
     staticClass: "control-label",
     attrs: {
@@ -50802,7 +50809,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "form-group col-md-5"
+    class: {
+      'form-group col-md-5': true, 'has-error': _vm.errors.province
+    }
   }, [_c('label', {
     staticClass: "control-label",
     attrs: {
@@ -50833,7 +50842,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v("\n                              " + _vm._s(province.name) + "\n                          ")])
   }))]), _vm._v(" "), _c('div', {
-    staticClass: "form-group col-md-5"
+    class: {
+      'form-group col-md-5': true, 'has-error': _vm.errors.city_municipality
+    }
   }, [_c('label', {
     staticClass: "control-label",
     attrs: {
@@ -50843,13 +50854,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.city),
-      expression: "city"
+      value: (_vm.cityMunicipality),
+      expression: "cityMunicipality"
     }],
     staticClass: "form-control",
     on: {
       "change": function($event) {
-        _vm.city = Array.prototype.filter.call($event.target.options, function(o) {
+        _vm.cityMunicipality = Array.prototype.filter.call($event.target.options, function(o) {
           return o.selected
         }).map(function(o) {
           var val = "_value" in o ? o._value : o.value;
