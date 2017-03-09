@@ -25,7 +25,7 @@
              </div>
              
              <table id="tbl-evacuations" class="table table-hover table-condensed table-striped" style="font-size: 12px">
-                 <thead>
+                 <thead class="text-primary">
                      <tr>
                          <th style="text-align: center" width="200">Province</th>
                          <th style="text-align: center">City/Municipality</th>
@@ -53,7 +53,9 @@
                          <td style="text-align: center">{{ evacuation.non_potable }}</td>
                      </tr>
                  </tbody>
+                 
              </table>
+             <div class="text-center"><button class="btn btn-xs btn-default" @click="loadMore">Load more</button></div>
             
           </div>
         </div>
@@ -71,7 +73,9 @@
                 provinces: [],
                 city_municipalities: [],
                 selectedProvince: 0,
-                selectedCity: 0
+                selectedCity: 0,
+                skip: 100,
+                take: 100
             }
         },
         watch: {
@@ -92,6 +96,24 @@
           
         },
         methods: {
+            loadMore(){
+                let self = this;
+                self.$http.post('/evacuation/skip/take', {
+                    skip: self.skip,
+                    take: self.take
+                }).then((resp) => {
+                    if (resp.status === 200) {
+                        let json = resp.body;
+                        for (var i = json.length - 1; i >= 0; i--) {
+                            self.evacuations.push(json[i]);
+                        }
+                    }
+                }, (resp) => {
+                    if (resp.status === 422) {
+                      console.log(resp)
+                    }
+                });
+            },
             printTbl(){
                 let self = this;
                 let hideElem = '.hide-on-print';

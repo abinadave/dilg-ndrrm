@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => ['auth']], function () {
+    Route::post('evacuation/skip/take', 'EvacuationController@scroll');
     Route::post('municipality/filterby/province', 'ProvinceController@getCities');
     Route::get('evacuations/filter/{pid}/{cit}', 'EvacuationController@filter');
     Route::get('city/management', 'CityMunicipalityController@fetch');

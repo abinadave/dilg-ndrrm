@@ -35,6 +35,12 @@ class EvacuationController extends Controller
     	]);
     }
 
+    public function scroll(Request $request){
+       $skip = $request->input('skip');
+       $take = $request->input('take');
+       return Evacuation::skip($skip)->take($take)->get();
+    }
+
     public function search(Request $request){
     	$keyword = $request->input('keyword');
         $evacations = array();

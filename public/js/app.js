@@ -45537,6 +45537,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -45548,7 +45550,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             provinces: [],
             city_municipalities: [],
             selectedProvince: 0,
-            selectedCity: 0
+            selectedCity: 0,
+            skip: 100,
+            take: 100
         };
     },
 
@@ -45569,6 +45573,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     components: {},
     methods: {
+        loadMore: function loadMore() {
+            var self = this;
+            self.$http.post('/evacuation/skip/take', {
+                skip: self.skip,
+                take: self.take
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    for (var i = json.length - 1; i >= 0; i--) {
+                        self.evacuations.push(json[i]);
+                    }
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
         printTbl: function printTbl() {
             var self = this;
             var hideElem = '.hide-on-print';
@@ -50685,9 +50707,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "text-align": "center"
       }
     }, [_vm._v(_vm._s(evacuation.non_potable))])])
-  }))])])])])
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "text-center"
+  }, [_c('button', {
+    staticClass: "btn btn-xs btn-default",
+    on: {
+      "click": _vm.loadMore
+    }
+  }, [_vm._v("Load more")])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', {
+  return _c('thead', {
+    staticClass: "text-primary"
+  }, [_c('tr', [_c('th', {
     staticStyle: {
       "text-align": "center"
     },

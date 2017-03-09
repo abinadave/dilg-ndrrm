@@ -8,7 +8,7 @@ class FacilityController extends Controller
 {
     public function fetch(){
     	return response()->json([
-    		'facilities' => \App\Facility::orderBy('id','desc')->get()
+    		'facilities' => \App\Facility::orderBy('id','desc')->limit(100)->get()
     	]);
     }
 

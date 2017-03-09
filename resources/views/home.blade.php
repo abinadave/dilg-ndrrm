@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
+    <link rel="shortcut icon" href="/images/dilg-logo.png" />
     <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Welcome to {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     
