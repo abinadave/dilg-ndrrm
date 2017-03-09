@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 Route::get('server/info', function(){
     echo phpinfo();
@@ -23,6 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => ['auth']], function () {
+    Route::post('municipality/filterby/province', 'ProvinceController@getCities');
+    Route::get('evacuations/filter/{pid}/{cit}', 'EvacuationController@filter');
     Route::get('city/management', 'CityMunicipalityController@fetch');
     Route::get('/migrate', 'HomeController@migrate');
     Route::get('officer/management', 'OfficerController@fetch');
@@ -36,4 +36,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('city/municipality', 'CityMunicipalityController@insert');
     Route::get('Provinces/All/Tabs/{id}', 'ProvinceController@fetchAlltabs');
     Route::post('officer', 'OfficerController@insert');
+    Route::delete('officer/{id}', 'OfficerController@delete');
+    Route::get('officers/filter/province/{id}', 'OfficerController@filterBy');
 });

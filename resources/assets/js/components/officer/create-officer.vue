@@ -68,7 +68,8 @@
 </style>
 <script>
     import CompCreateProvince from '../province/create-province.vue'
-    import toastr from 'toastr'
+    // import toastr from 'toastr'
+    import alertify from 'alertify.js'
     export default {
         mounted() {
             this.fetchProvince();
@@ -102,6 +103,17 @@
             }
         },
         methods: {
+            clearForm(){
+                let self = this;
+                self.province = '';
+                self.drrmOfficer = '';
+                self.cityMunicipality = '';
+                self.mobileNo = '';
+                self.landlineNo = '';
+                self.email = '';
+                self.radioFreq = '';
+                self.callSign = '';
+            },
             submitOfficer(){
                 let self = this;
                 let form = {
@@ -119,7 +131,9 @@
                     if (resp.status === 200) {
                         let json = resp.body;
                         if (json.id) {
-                            toastr.success('new officer added.');
+                            self.$emit('addedofficer', json);
+                            alertify.alert('New RDRRM Officer was Added.');
+                            self.clearForm();
                         }
                     }
                 }, (resp) => {

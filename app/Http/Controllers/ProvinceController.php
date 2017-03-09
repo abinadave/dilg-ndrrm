@@ -9,6 +9,19 @@ use App\CityMunicipality as City;
 
 class ProvinceController extends Controller
 {
+    public function getCities(Request $request){
+        $province = $request->input('province');
+        if ($province == 0) {
+            return response()->json([
+                'city_municipalities' => City::orderBy('name')->get()
+            ]);
+        }else {
+             return response()->json([
+                'city_municipalities' => City::where('province_id', $province)->orderBy('name')->get()
+            ]);
+        }
+        
+    }
     public function insert(Request $request){
     	$this->validate($request, [
 	        'name' => 'required|unique:provinces|max:100'
