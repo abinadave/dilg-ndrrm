@@ -23,7 +23,7 @@
                  <option v-for="city in city_municipalities" :value="city.id">{{ city.name }}</option>
              </select>
              </div>
-             
+             <br>
              <table id="tbl-evacuations" class="table table-hover table-condensed table-striped" style="font-size: 12px">
                  <thead class="text-primary">
                      <tr>
@@ -55,7 +55,7 @@
                  </tbody>
                  
              </table>
-             <div class="text-center"><button class="btn btn-xs btn-default" @click="loadMore">Load more</button></div>
+             <div v-show="!loadMoreHide" class="text-center"><button :disabled="loadingMore" class="btn btn-xs btn-default" @click="loadMore">Load more <i class="fa fa-refresh" aria-hidden="true"></i></button></div>
             
           </div>
         </div>
@@ -75,12 +75,14 @@
                 selectedProvince: 0,
                 selectedCity: 0,
                 skip: 100,
-                take: 100
+                take: 100,
+                loadingMore: false,
+                loadMoreHide: false
             }
         },
         watch: {
             'selectedProvince': function(newVal){
-                this.filterProvinceCity();
+                this.fetch();
                 this.getLgus();
             },
             'selectedCity': function(newVal){
@@ -96,23 +98,36 @@
           
         },
         methods: {
+            searchFrontEnd(){
+                let self = this;
+                let array = self.evacuations;
+                array.filter(function(index){
+                    console.log(index)
+                });
+            },
             loadMore(){
                 let self = this;
-                self.$http.post('/evacuation/skip/take', {
-                    skip: self.skip,
-                    take: self.take
-                }).then((resp) => {
-                    if (resp.status === 200) {
-                        let json = resp.body;
-                        for (var i = json.length - 1; i >= 0; i--) {
-                            self.evacuations.push(json[i]);
+                self.loadingMore = true;
+                setTimeout(function(){
+                    self.$http.post('/evacuation/skip/take', {
+                        skip: self.skip,
+                        take: self.take
+                    }).then((resp) => {
+                        if (resp.status === 200) {
+                            let json = resp.body;
+                            self.skip += 100;
+                            self.loadingMore = false;
+                            for (var i = json.length - 1; i >= 0; i--) {
+                                self.evacuations.push(json[i]);
+                            }
                         }
-                    }
-                }, (resp) => {
-                    if (resp.status === 422) {
-                      console.log(resp)
-                    }
-                });
+                    }, (resp) => {
+                        if (resp.status === 422) {
+                          console.log(resp)
+                        }
+                    });
+                }, 500);
+                
             },
             printTbl(){
                 let self = this;
@@ -204,26 +219,36 @@
                 clearTimeout(self.timer);
                 self.timer = setTimeout(function(){
                     if (self.search == '') {
-                        self.fetch();
+                        self.searchKeyWord();
                     }
+                    
                 }, 500);
+            },
+            searchUsingJs(){
+                let self = this;
+                console.log('')
             },
             searchKeyWord(){
                 let self = this;
                 self.searching = true;
+                
                 axios.post('/evacuation/search', {
-                    keyword: self.search
+                    keyword: self.search,
+                    province: self.selectedProvince,
+                    city: self.selectedCity
                 })
                 .then(function (response) {
                     if (response.status === 200) {
                         self.searching = false;
                         self.evacuations = response.data;
+                        self.loadMoreHide = true;
                     }
                 })
                 .catch(function (error) {
                     self.searching = false;
-                    console.log(error);
+
                 });
+                
             },
             fetch(){
                 let self = this;
@@ -233,10 +258,12 @@
                 }).then(function (response) {
                     if (response.status === 200) {
                         self.evacuations = response.data.evacuations;
+                        self.loadMoreHide = false;
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
+                    self.loadMoreHide = false;
                 });
             }
         },

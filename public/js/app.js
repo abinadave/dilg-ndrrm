@@ -45552,13 +45552,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             selectedProvince: 0,
             selectedCity: 0,
             skip: 100,
-            take: 100
+            take: 100,
+            loadingMore: false,
+            loadMoreHide: false
         };
     },
 
     watch: {
         'selectedProvince': function selectedProvince(newVal) {
-            this.filterProvinceCity();
+            this.fetch();
             this.getLgus();
         },
         'selectedCity': function selectedCity(newVal) {
@@ -45573,23 +45575,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     components: {},
     methods: {
+        searchFrontEnd: function searchFrontEnd() {
+            var self = this;
+            var array = self.evacuations;
+            array.filter(function (index) {
+                console.log(index);
+            });
+        },
         loadMore: function loadMore() {
             var self = this;
-            self.$http.post('/evacuation/skip/take', {
-                skip: self.skip,
-                take: self.take
-            }).then(function (resp) {
-                if (resp.status === 200) {
-                    var json = resp.body;
-                    for (var i = json.length - 1; i >= 0; i--) {
-                        self.evacuations.push(json[i]);
+            self.loadingMore = true;
+            setTimeout(function () {
+                self.$http.post('/evacuation/skip/take', {
+                    skip: self.skip,
+                    take: self.take
+                }).then(function (resp) {
+                    if (resp.status === 200) {
+                        var json = resp.body;
+                        self.skip += 100;
+                        self.loadingMore = false;
+                        for (var i = json.length - 1; i >= 0; i--) {
+                            self.evacuations.push(json[i]);
+                        }
                     }
-                }
-            }, function (resp) {
-                if (resp.status === 422) {
-                    console.log(resp);
-                }
-            });
+                }, function (resp) {
+                    if (resp.status === 422) {
+                        console.log(resp);
+                    }
+                });
+            }, 500);
         },
         printTbl: function printTbl() {
             var self = this;
@@ -45681,23 +45695,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             clearTimeout(self.timer);
             self.timer = setTimeout(function () {
                 if (self.search == '') {
-                    self.fetch();
+                    self.searchKeyWord();
                 }
             }, 500);
+        },
+        searchUsingJs: function searchUsingJs() {
+            var self = this;
+            console.log('');
         },
         searchKeyWord: function searchKeyWord() {
             var self = this;
             self.searching = true;
+
             axios.post('/evacuation/search', {
-                keyword: self.search
+                keyword: self.search,
+                province: self.selectedProvince,
+                city: self.selectedCity
             }).then(function (response) {
                 if (response.status === 200) {
                     self.searching = false;
                     self.evacuations = response.data;
+                    self.loadMoreHide = true;
                 }
             }).catch(function (error) {
                 self.searching = false;
-                console.log(error);
             });
         },
         fetch: function fetch() {
@@ -45708,9 +45729,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 if (response.status === 200) {
                     self.evacuations = response.data.evacuations;
+                    self.loadMoreHide = false;
                 }
             }).catch(function (error) {
                 console.log(error);
+                self.loadMoreHide = false;
             });
         }
     },
@@ -50661,7 +50684,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": city.id
       }
     }, [_vm._v(_vm._s(city.name))])
-  })], 2)]), _vm._v(" "), _c('table', {
+  })], 2)]), _vm._v(" "), _c('br'), _vm._v(" "), _c('table', {
     staticClass: "table table-hover table-condensed table-striped",
     staticStyle: {
       "font-size": "12px"
@@ -50708,13 +50731,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v(_vm._s(evacuation.non_potable))])])
   }))]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.loadMoreHide),
+      expression: "!loadMoreHide"
+    }],
     staticClass: "text-center"
   }, [_c('button', {
     staticClass: "btn btn-xs btn-default",
+    attrs: {
+      "disabled": _vm.loadingMore
+    },
     on: {
       "click": _vm.loadMore
     }
-  }, [_vm._v("Load more")])])])])])
+  }, [_vm._v("Load more "), _c('i', {
+    staticClass: "fa fa-refresh",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', {
     staticClass: "text-primary"
