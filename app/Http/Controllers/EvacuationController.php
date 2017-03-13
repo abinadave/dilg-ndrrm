@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Evacuation as Evacuation;
 use DB;
-
+use Excel;
 class EvacuationController extends Controller
 {
+    public function evacuationToExcel(){
+          $evacuations =  Evacuation::all();
+          
+          return view('layouts.create-excel') ->with(compact('evacuations'));          
+    }
     public function filter($pid, $cid){
         if ($pid == 0 && $cid != 0) {
             return response()->json([
@@ -66,24 +71,31 @@ class EvacuationController extends Controller
         $evacuations = array();
         if ($province == 0 && $city == 0) {
               $evacuations = Evacuation::where('evacuation_center', 'like', '%'. $keyword .'%')
-                    ->orWhere('location', 'like', '%'. $keyword .'%')
-                    ->orWhere('floor_area', 'like', '%'. $keyword .'%')
-                    ->orWhere('total_capacity', 'like', '%'. $keyword .'%')
-                    ->orWhere('male', 'like', '%'. $keyword .'%')
-                    ->orWhere('female', 'like', '%'. $keyword .'%')
-                    ->orWhere('potable', 'like', '%'. $keyword .'%')
-                    ->orWhere('non_potable', 'like', '%'. $keyword .'%')
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('evacuation_center', 'like', '%'. $keyword . '%')
+                            ->orWhere('location', 'like', '%'. $keyword .'%')
+                            ->orWhere('floor_area', 'like', '%'. $keyword .'%')
+                            ->orWhere('total_capacity', 'like', '%'. $keyword .'%')
+                            ->orWhere('male', 'like', '%'. $keyword .'%')
+                            ->orWhere('female', 'like', '%'. $keyword .'%')
+                            ->orWhere('potable', 'like', '%'. $keyword .'%')
+                            ->orWhere('non_potable', 'like', '%'. $keyword .'%');
+                    })
+                    
                     ->orderBy('id','desc')
                     ->get();
           }elseif($province != 0 && $city == 0){
               $evacuations = Evacuation::
-                     where('evacuation_center', 'like', '%'. $keyword . '%')
-                    ->where('location', 'like', '%'. $keyword . '%')
-                    ->where('province_id', '=' , $province)
+                      where('province_id', '=' , $province)
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('evacuation_center', 'like', '%'. $keyword . '%')
+                            ->orWhere('location', 'like', '%'. $keyword . '%');
+                    })
                     ->orderBy('id','desc')
                     ->get();
           }elseif($province == 0 && $city != 0){
-              $evacuations = Evacuation::where('municipality_id', '=' , $city)
+              $evacuations = Evacuation::
+                      where('municipality_id', '=' , $city)
                     ->where(function($query) use ($keyword) {
                         return $query->where('evacuation_center', 'like', '%'. $keyword . '%')
                             ->orWhere('location', 'like', '%'. $keyword . '%');

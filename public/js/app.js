@@ -45539,6 +45539,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -45554,7 +45558,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             skip: 100,
             take: 100,
             loadingMore: false,
-            loadMoreHide: false
+            loadMoreHide: false,
+            whileExporting: false
         };
     },
 
@@ -45575,6 +45580,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     components: {},
     methods: {
+        exportTbl: function exportTbl() {
+            var self = this;
+            self.whileExporting = true;
+            setTimeout(function () {
+                self.whileExporting = false;
+            }, 1500);
+        },
         searchFrontEnd: function searchFrontEnd() {
             var self = this;
             var array = self.evacuations;
@@ -47262,20 +47274,85 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
     data: function data() {
         return {
-            rescues: [], search: ''
+            rescues: [], search: '',
+            provinces: [], city_municipalities: [],
+            skip: 50,
+            take: 50,
+            loadingMore: false,
+            loadMoreHide: false,
+            whileExporting: false,
+            selectedProvince: 0,
+            selectedCity: 0
         };
     },
     mounted: function mounted() {
         console.log('Rescue.vue is mounted');
         this.fetch();
+        this.fetchProvince();
     },
 
     components: {},
     methods: {
+        searchNow: function searchNow() {
+            var self = this;
+            self.$http.post('/rescue/search', {
+                keyword: self.search,
+                province: self.selectedProvince,
+                city: self.selectedCity
+            }).then(function (resp) {
+                var json = resp.body;
+                if (json.length) {
+                    self.rescues = json;
+                }
+            }, function (resp) {
+                console.log(resp);
+            });
+        },
+        fetchProvince: function fetchProvince() {
+            var self = this;
+            self.$http.get('/province/management').then(function (resp) {
+                _.each(resp.body, function (value, key) {
+                    self[key] = value;
+                });
+            }, function (resp) {
+                console.log(resp);
+            });
+        },
+        getProvince: function getProvince(rescue) {
+            var self = this;
+            var rs = _.filter(self.provinces, { id: rescue.province_id });
+            if (rs.length) {
+                return rs[0].name.toUpperCase();
+            }
+        },
+        getCity: function getCity(i) {
+            var self = this;
+            var rs = _.filter(self.city_municipalities, { id: i });
+            if (rs.length) {
+                return rs[0].name.toUpperCase();
+            }
+        },
         fetch: function fetch() {
             var self = this;
             axios.get('/rescue/management').then(function (response) {
@@ -47286,15 +47363,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        filterDropdown: function filterDropdown() {
+            var self = this;
+            self.$http.post('/rescue/filterby/dropdown', {
+                province: self.selectedProvince,
+                city: self.selectedCity
+            }).then(function (resp) {
+                var json = resp.body;
+                self.rescues = json.rescues;
+            }, function (resp) {
+                console.log(resp);
+            });
         }
     },
-    computed: {
-        filterRescueTeam: function filterRescueTeam() {
+    watch: {
+        'search': function search(newVal) {
             var self = this;
-            var value = self.search.toLowerCase();
-            return self.rescues.filter(function (index) {
-                return index.rescue_team.toLowerCase().indexOf(value) !== -1 || index.rescue_capability.toLowerCase().indexOf(value) !== -1 || index.hotline_no.toLowerCase().indexOf(value) !== -1 || index.team_leader.toLowerCase().indexOf(value) !== -1;
-            });
+            clearTimeout(self.timer);
+            self.timer = setTimeout(function () {
+                if (newVal == '') {
+                    self.fetch();
+                    self.skip = 50;
+                    self.take = 50;
+                }
+            }, 700);
+        },
+        'selectedProvince': function selectedProvince() {
+            var self = this;
+            self.filterDropdown();
         }
     }
 };
@@ -50573,13 +50670,44 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pull-right",
     staticStyle: {
       "cursor": "pointer",
-      "margin-top": "-10px"
+      "margin-top": "-16px"
     },
     on: {
       "click": _vm.printTbl
     }
   }, [_c('i', {
-    staticClass: "fa fa-print"
+    staticClass: "fa fa-print fa-2x"
+  }), _vm._v("    ")]), _vm._v(" "), _c('a', {
+    staticClass: "pull-right",
+    staticStyle: {
+      "margin-top": "-16px",
+      "padding-right": "6px"
+    },
+    attrs: {
+      "href": "/evacuations/download"
+    },
+    on: {
+      "click": _vm.exportTbl
+    }
+  }, [_c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.whileExporting),
+      expression: "!whileExporting"
+    }],
+    staticClass: "fa fa-download fa-2x",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.whileExporting),
+      expression: "whileExporting"
+    }],
+    staticClass: "fa fa-spinner fa-pulse fa-2x fa-fw text-warning"
   })])]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
   }, [_c('input', {
@@ -51326,7 +51454,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "col-md-12"
   }, [_c('div', {
-    staticClass: "panel panel-info"
+    staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-heading"
   }, [_c('h3', {
@@ -51335,7 +51463,71 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "badge"
   }), _vm._v(_vm._s(_vm.rescues.length))])]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
-  }, [_c('input', {
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedProvince),
+      expression: "selectedProvince"
+    }],
+    staticClass: "form-control",
+    staticStyle: {
+      "width": "15%",
+      "display": "inline-block"
+    },
+    on: {
+      "change": function($event) {
+        _vm.selectedProvince = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        })[0]
+      }
+    }
+  }, [_c('option', {
+    domProps: {
+      "value": 0
+    }
+  }, [_vm._v("All Province")]), _vm._v(" "), _vm._l((_vm.provinces), function(province) {
+    return _c('option', {
+      domProps: {
+        "value": province.id
+      }
+    }, [_vm._v(" \n                 " + _vm._s(province.name) + "\n             ")])
+  })], 2), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedCity),
+      expression: "selectedCity"
+    }],
+    staticClass: "form-control",
+    staticStyle: {
+      "width": "15%",
+      "display": "inline-block"
+    },
+    on: {
+      "change": function($event) {
+        _vm.selectedCity = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        })[0]
+      }
+    }
+  }, [_c('option', {
+    domProps: {
+      "value": 0
+    }
+  }, [_vm._v("All City/Municipalities")]), _vm._v(" "), _vm._l((_vm.city_municipalities), function(city) {
+    return _c('option', {
+      domProps: {
+        "value": city.id
+      }
+    }, [_vm._v(" \n                 " + _vm._s(city.name) + "\n             ")])
+  })], 2), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -51344,6 +51536,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }],
     staticClass: "form-control",
     staticStyle: {
+      "display": "inline-block",
       "border-radius": "25px",
       "width": "350px",
       "margin-bottom": "8px"
@@ -51356,15 +51549,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": _vm._s(_vm.search)
     },
     on: {
+      "keyup": function($event) {
+        if (_vm._k($event.keyCode, "enter", 13)) { return; }
+        _vm.searchNow($event)
+      },
       "input": function($event) {
         if ($event.target.composing) { return; }
         _vm.search = $event.target.value
       }
     }
-  }), _vm._v(" "), _c('table', {
-    staticClass: "table table-hover table-condensed table-bordered"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.filterRescueTeam), function(rescue) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(rescue.rescue_team))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(rescue.rescue_capability))]), _vm._v(" "), _c('td', {
+  }), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary btn-sm",
+    staticStyle: {
+      "display": "inline-block"
+    }
+  }, [_vm._v("Search")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-hover table-condensed table-bordered",
+    staticStyle: {
+      "font-size": "12px"
+    }
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.rescues), function(rescue) {
+    return _c('tr', [_c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(_vm.getProvince(rescue)))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(_vm.getCity(rescue.municipality_id)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(rescue.rescue_team))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(rescue.rescue_capability))]), _vm._v(" "), _c('td', {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(rescue.hotline_no))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(rescue.team_leader))]), _vm._v(" "), _c('td', {
       staticStyle: {
@@ -51373,7 +51582,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v(_vm._s(rescue.man_power))])])
   }))])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Rescue Team")]), _vm._v(" "), _c('th', [_vm._v("Rescue Capability")]), _vm._v(" "), _c('th', {
+  return _c('thead', [_c('tr', [_c('th', {
+    staticClass: "text-center",
+    attrs: {
+      "width": "200"
+    }
+  }, [_vm._v("Province")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center",
+    attrs: {
+      "width": "200"
+    }
+  }, [_vm._v("City/Municipality")]), _vm._v(" "), _c('th', [_vm._v("Rescue Team")]), _vm._v(" "), _c('th', [_vm._v("Rescue Capability")]), _vm._v(" "), _c('th', {
     staticClass: "text-center",
     attrs: {
       "width": "200"

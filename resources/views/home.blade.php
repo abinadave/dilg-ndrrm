@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/images/dilg-logo.png" />
     <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Welcome to {{ config('app.name', 'Laravel') }}</title>
+    <title>Region 8,{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     
@@ -60,7 +60,6 @@
                           <ul class="dropdown-menu">
                             <li><router-link :to="{ name: 'manage-province' }">Province</router-link></li>
                             <li><router-link :to="{ name: 'manage-city-municipality' }">City/Municipality</router-link></li>
-                            
                           </ul>
                         </li>
                     </ul>

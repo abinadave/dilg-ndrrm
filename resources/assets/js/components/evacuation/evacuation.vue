@@ -6,7 +6,11 @@
         <div class="panel panel-default hide-on-print">
           <div class="panel-heading">
             <h3 class="panel-title">Evacuation Centers</h3>
-            <a style="cursor:pointer; margin-top: -10px" @click="printTbl" class="pull-right"><i class="fa fa-print"></i></a>
+            <a style="cursor:pointer; margin-top: -16px" @click="printTbl" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a @click="exportTbl" style="margin-top: -16px; padding-right: 6px" href="/evacuations/download" class="pull-right">
+              <i v-show="!whileExporting" class="fa fa-download fa-2x" aria-hidden="true"></i> 
+              <i v-show="whileExporting" class="fa fa-spinner fa-pulse fa-2x fa-fw text-warning"></i>
+            </a>
           </div>
           <div class="panel-body">
              <input @keyup="changeinKeyword" @keyup.enter="searchKeyWord" type="text" v-model="search" class="form-control hide-on-print" style="border-radius: 25px; width: 350px; display: inline; margin-bottom: 8px" placeholder="Search rescue team">
@@ -77,7 +81,8 @@
                 skip: 100,
                 take: 100,
                 loadingMore: false,
-                loadMoreHide: false
+                loadMoreHide: false,
+                whileExporting: false
             }
         },
         watch: {
@@ -98,6 +103,13 @@
           
         },
         methods: {
+            exportTbl(){
+                let self = this;
+                self.whileExporting = true;
+                setTimeout(function(){
+                    self.whileExporting = false;
+                }, 1500);
+            },
             searchFrontEnd(){
                 let self = this;
                 let array = self.evacuations;
