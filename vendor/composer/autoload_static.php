@@ -328,6 +328,7 @@ class ComposerStaticInit93f3cdb5c8f31d50bb363b873cdb2981
         'CreateRescueTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_153808_create_rescue_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'DropColumnTimestampsOfficersTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_16_085757_drop_column_timestamps_officers_table.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',

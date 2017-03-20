@@ -72,6 +72,19 @@
            
         },
         methods: {
+            getAllLgu(){
+                let self = this;
+                self.$http.post('/municipality/filterby/province', {
+                    province: self.selectedProvince
+                }).then((resp) => {
+                    if (resp.status === 200) {
+                        let json = resp.body;
+                        self.city_municipalities = json.city_municipalities;
+                    }
+                }, (resp) => {
+                    console.log(resp);
+                })
+            },
             searchNow(){
                 let self = this;
                 self.$http.post('/rescue/search', {
@@ -142,13 +155,18 @@
                 clearTimeout(self.timer);
                 self.timer = setTimeout(function(){
                     if (newVal == '') {
-                        self.fetch();
+                        self.searchNow();
                         self.skip = 50;
                         self.take = 50;
                     }
                 }, 700);
             },
             'selectedProvince': function(){
+                let self = this;
+                self.getAllLgu();
+                self.filterDropdown();
+            },
+            'selectedCity': function(){
                 let self = this;
                 self.filterDropdown();
             }

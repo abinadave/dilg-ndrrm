@@ -22,6 +22,7 @@ return array(
     'CreateRescueTable' => $baseDir . '/database/migrations/2017_01_27_153808_create_rescue_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
+    'DropColumnTimestampsOfficersTable' => $baseDir . '/database/migrations/2017_03_16_085757_drop_column_timestamps_officers_table.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',

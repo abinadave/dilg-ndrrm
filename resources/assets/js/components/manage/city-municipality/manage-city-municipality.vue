@@ -13,7 +13,7 @@
                           <!-- Nav tabs -->
                           <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">List of City/Municipality <span class="badge">{{ city_municipalities.length }}</span></a></li>
-                            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Create City</a></li>
+                            <!-- <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Create City</a></li> -->
                           </ul>
 
                           <!-- Tab panes -->
@@ -31,7 +31,6 @@
                                 <create-city 
                                     @cityadded="createCity" 
                                     :provinces="provinces">
-                                    
                                 </create-city>
                             </div>
                             

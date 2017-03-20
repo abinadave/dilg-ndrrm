@@ -46060,10 +46060,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_datatables_net__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_datatables_net___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_datatables_net__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_datatables_net__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_datatables_net___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_datatables_net__);
 //
 //
 //
@@ -46100,7 +46098,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-
+// import _ from 'lodash'
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -46146,19 +46144,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         countOfficers: function countOfficers(cityId) {
             var self = this;
-            return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.officers, { municipality_id: cityId }).length;
+            return _.filter(self.officers, { municipality_id: cityId }).length;
         },
         countRescue: function countRescue(cityId) {
             var self = this;
-            return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.rescuess, { municipality_id: cityId }).length;
+            return _.filter(self.rescues, { municipality_id: cityId }).length;
         },
         countEvacuations: function countEvacuations(cityId) {
             var self = this;
-            return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.evacuations, { municipality_id: cityId }).length;
+            return _.filter(self.evacuations, { municipality_id: cityId }).length;
         },
         countFacilities: function countFacilities(cityId) {
             var self = this;
-            return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.facilities, { municipality_id: cityId }).length;
+            return _.filter(self.facilities, { municipality_id: cityId }).length;
         },
         showTheLgus: function showTheLgus(city) {
             var self = this;
@@ -46166,7 +46164,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getProvinceName: function getProvinceName(province_id) {
             var self = this;
-            var rs = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.filter(self.provinces, { id: Number(province_id) });
+            var rs = _.filter(self.provinces, { id: Number(province_id) });
             return rs[0].name.toUpperCase();
         }
     }
@@ -46183,7 +46181,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__create_city_municipality___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__create_city_municipality__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue__);
-//
 //
 //
 //
@@ -47314,6 +47311,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     components: {},
     methods: {
+        getAllLgu: function getAllLgu() {
+            var self = this;
+            self.$http.post('/municipality/filterby/province', {
+                province: self.selectedProvince
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.city_municipalities = json.city_municipalities;
+                }
+            }, function (resp) {
+                console.log(resp);
+            });
+        },
         searchNow: function searchNow() {
             var self = this;
             self.$http.post('/rescue/search', {
@@ -47383,13 +47393,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             clearTimeout(self.timer);
             self.timer = setTimeout(function () {
                 if (newVal == '') {
-                    self.fetch();
+                    self.searchNow();
                     self.skip = 50;
                     self.take = 50;
                 }
             }, 700);
         },
         'selectedProvince': function selectedProvince() {
+            var self = this;
+            self.getAllLgu();
+            self.filterDropdown();
+        },
+        'selectedCity': function selectedCity() {
             var self = this;
             self.filterDropdown();
         }
@@ -52500,7 +52515,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("List of City/Municipality "), _c('span', {
     staticClass: "badge"
-  }, [_vm._v(_vm._s(_vm.city_municipalities.length))])])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.city_municipalities.length))])])])]), _vm._v(" "), _c('div', {
     staticClass: "tab-content"
   }, [_c('div', {
     staticClass: "tabpanel-pane active",
@@ -52531,20 +52546,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "cityadded": _vm.createCity
     }
   })], 1)])])])])])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    attrs: {
-      "role": "presentation"
-    }
-  }, [_c('a', {
-    attrs: {
-      "href": "#messages",
-      "aria-controls": "messages",
-      "role": "tab",
-      "data-toggle": "tab"
-    }
-  }, [_vm._v("Create City")])])
-}]}
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import _ from 'lodash'
+	// import _ from 'lodash'
     import dt from 'datatables.net'
 
     export default {
@@ -83,7 +83,7 @@
             },
             countRescue(cityId){
                 let self = this;
-                return _.filter(self.rescuess, { municipality_id: cityId}).length;
+                return _.filter(self.rescues, { municipality_id: cityId}).length;
             },
             countEvacuations(cityId){
                 let self = this;

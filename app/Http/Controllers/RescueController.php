@@ -41,16 +41,69 @@ class RescueController extends Controller
     	$city = $request->input('city');
 
     	if ($keyword == '') {
-    		
+    		if ($province != 0 && $city == 0) {
+                $rescues = Rescue::where('province_id', '=' , $province)->orderBy('id','desc')->get();
+            }elseif($province == 0 && $city != 0){
+                $rescues = Rescue::where('municipality_id', '=' , $city)->orderBy('id','desc')->get();
+            }elseif($province != 0 && $city != 0){
+                $rescues = Rescue::where('province_id', '=' , $province)
+                    ->where('municipality_id', '=' , $city)->orderBy('id','desc')->get();
+            }else {
+                $rescues = Rescue::orderBy('id','desc')->limit(50)->get();
+            }
     	}else {
-    		$rescues = Rescue::where('rescue_team', 'like', '%'. $keyword .'%')
-	            ->orWhere('hotline_no', 'like', '%'. $keyword .'%')
-	            ->orWhere('team_leader', 'like', '%'. $keyword .'%')
-	            ->orWhere('man_power', 'like', '%'. $keyword .'%')
-	            ->orderBy('id','desc')
-	            ->get();
+    		$rescues = $this->advanceSearch($province, $city, $keyword);
     	}
-
     	return $rescues;
+    }
+    private function advanceSearch($province, $city, $keyword){
+        $data = array();
+        if ($province == 0 && $city == 0) {
+              $data = Rescue::where('rescue_team', 'like', '%'. $keyword .'%')
+                        ->orWhere('rescue_capability', 'like', '%'. $keyword . '%')
+                        ->orWhere('hotline_no', 'like', '%'. $keyword .'%')
+                        ->orWhere('team_leader', 'like', '%'. $keyword .'%')
+                        ->orWhere('man_power', 'like', '%'. $keyword .'%')
+                    ->orderBy('id','desc')
+                    ->get();
+          }elseif($province != 0 && $city == 0){
+              $data = Rescue::
+                      where('province_id', '=' , $province)
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('rescue_team', 'like', '%'. $keyword . '%')
+                            ->orWhere('rescue_capability', 'like', '%'. $keyword .'%')
+                            ->orWhere('hotline_no', 'like', '%'. $keyword .'%')
+                            ->orWhere('team_leader', 'like', '%'. $keyword .'%')
+                            ->orWhere('man_power', 'like', '%'. $keyword .'%');
+                    })
+                    ->orderBy('id','desc')
+                    ->get();
+          }elseif($province == 0 && $city != 0){
+              $data = Rescue::
+                      where('municipality_id', '=' , $city)
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('rescue_team', 'like', '%'. $keyword . '%')
+                            ->orWhere('rescue_capability', 'like', '%'. $keyword .'%')
+                            ->orWhere('hotline_no', 'like', '%'. $keyword .'%')
+                            ->orWhere('team_leader', 'like', '%'. $keyword .'%')
+                            ->orWhere('man_power', 'like', '%'. $keyword .'%');
+                    })
+                    ->orderBy('id','desc')
+                    ->get();
+          }elseif($province != 0 && $city != 0){
+            /* ok na */
+              $data = Rescue::where('province_id', '=' , $province)
+                    ->where('municipality_id', '=' , $city)
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('rescue_team', 'like', '%'. $keyword . '%')
+                            ->orWhere('rescue_capability', 'like', '%'. $keyword .'%')
+                            ->orWhere('hotline_no', 'like', '%'. $keyword .'%')
+                            ->orWhere('team_leader', 'like', '%'. $keyword .'%')
+                            ->orWhere('man_power', 'like', '%'. $keyword .'%');
+                    })
+                    ->orderBy('id','desc')
+                    ->get();
+          }
+        return $data;
     }
 }
