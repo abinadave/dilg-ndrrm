@@ -34,7 +34,6 @@
 </template>
 
 <script>
-	// import _ from 'lodash'
     import dt from 'datatables.net'
 
     export default {

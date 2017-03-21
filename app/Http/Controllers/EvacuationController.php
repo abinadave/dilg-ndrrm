@@ -9,9 +9,8 @@ use Excel;
 class EvacuationController extends Controller
 {
     public function evacuationToExcel(){
-          $evacuations =  Evacuation::all();
-          
-          return view('layouts.create-excel') ->with(compact('evacuations'));          
+          $evacuations =  Evacuation::where('province_id', '>=', '1')->where('municipality_id', '>=', '1')->get();
+          return view('excel.export-evacuations')->with(compact('evacuations'));          
     }
     public function filter($pid, $cid){
         if ($pid == 0 && $cid != 0) {

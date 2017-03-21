@@ -2,7 +2,12 @@
     <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">All Rescue teams <span class="badge"></span>{{ rescues.length }}</h3>
+            <h3 class="panel-title">All Rescue teams <span class="badge"></span></h3>
+            <a style="cursor:pointer; margin-top: -16px" @click="printTbl" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a @click="exportTbl" style="margin-top: -16px; padding-right: 6px" href="/rescue/export" class="pull-right">
+              <i v-show="!whileExporting" class="fa fa-download fa-2x" aria-hidden="true"></i> 
+              <i v-show="whileExporting" class="fa fa-spinner fa-pulse fa-2x fa-fw text-warning"></i>
+            </a>
           </div>
           <div class="panel-body">
              <select style="width: 15%; display: inline-block" class="form-control" v-model="selectedProvince">
@@ -60,7 +65,8 @@
                 loadMoreHide: false,
                 whileExporting: false,
                 selectedProvince: 0,
-                selectedCity: 0
+                selectedCity: 0,
+                whileExporting: false
             }
         },
         mounted() {
@@ -72,6 +78,14 @@
            
         },
         methods: {
+            exportTbl(){
+                let self = this;
+                console.log(self);
+            },
+            printTbl(){
+                let self = this;
+                console.log(1)
+            },
             getAllLgu(){
                 let self = this;
                 self.$http.post('/municipality/filterby/province', {

@@ -139,7 +139,6 @@
                         }
                     });
                 }, 500);
-                
             },
             printTbl(){
                 let self = this;

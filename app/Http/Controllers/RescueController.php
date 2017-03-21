@@ -7,6 +7,10 @@ use App\Rescue as Rescue;
 
 class RescueController extends Controller
 {
+    public function export(){
+        $rescues = Rescue::where('province_id', '>=', '1')->where('municipality_id', '>=', '1')->get();
+        return view('excel.export-rescue')->with(compact('rescues'));       
+    }
     public function fetch(){
     	return response()->json([
     		'rescues' => Rescue::orderBy('id','desc')->take(50)->get()

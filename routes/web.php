@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('rescue/search', 'RescueController@searchOnly');
     Route::get('evacuations/download', 'EvacuationController@evacuationToExcel');
     Route::get('evacuations/export', 'EvacuationController@createExcelFile');
+    Route::get('rescue/export', 'RescueController@export');
     Route::post('evacuation/skip/take', 'EvacuationController@scroll');
     Route::post('municipality/filterby/province', 'ProvinceController@getCities');
     Route::get('evacuations/filter/{pid}/{cit}', 'EvacuationController@filter');
