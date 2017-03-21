@@ -10,4 +10,8 @@ class CityMunicipality extends Model
     {
         return $this->hasMany('App\Rescue');
     }
+    public function officers()
+    {
+        return $this->hasMany('App\Officer');
+    }
 }

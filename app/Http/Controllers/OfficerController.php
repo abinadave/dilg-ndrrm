@@ -56,8 +56,7 @@ class OfficerController extends Controller
 		return $officer;
 	}
     public function fetch(){
-    	return response()->json([
-    		'officers'=> Officer::orderBy('id','desc')->get()
-    	]);
+    	$officers = Officer::with(['province','municipality'])->orderBy('id','desc')->get();
+    	return $officers->toJson();
     }
 }

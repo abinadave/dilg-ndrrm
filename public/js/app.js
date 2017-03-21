@@ -45605,6 +45605,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if (resp.status === 200) {
                         var json = resp.body;
                         self.skip += 100;
+                        console.log(self.skip);
                         self.loadingMore = false;
                         for (var i = json.length - 1; i >= 0; i--) {
                             self.evacuations.push(json[i]);
@@ -46937,6 +46938,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         provinces: {
             type: Array
+        },
+        city_municipalities: {
+            type: Array
         }
     },
     mounted: function mounted() {
@@ -46953,13 +46957,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'create-officer': __WEBPACK_IMPORTED_MODULE_0__create_officer_vue___default.a
     },
     methods: {
+        getProvinceName: function getProvinceName(officer) {
+            return _.toArray(officer.province)[1];
+        },
+        getMunicipalityName: function getMunicipalityName(officer) {
+            return _.toArray(officer.municipality)[2];
+        },
         editOfficer: function editOfficer(officer) {
             var self = this;
             $('#modalEditOfficer').modal('show');
             self.$emit('syncofficerupdate', officer);
-            $.each(officer, function (index, val) {
-                console.log(index + ' : ' + val);
-            });
         },
         removeOfficer: function removeOfficer(officer, index) {
             var self = this;
@@ -46991,7 +46998,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var self = this;
             var value = self.search.toLowerCase();
             return self.officers.filter(function (index) {
-                return index.province.toLowerCase().indexOf(value) !== -1 || index.city_municipality.toLowerCase().indexOf(value) !== -1 || index.drrm_officer.toLowerCase().indexOf(value) !== -1 || index.mobile_no.toLowerCase().indexOf(value) !== -1 || index.landline_no.toLowerCase().indexOf(value) !== -1 || index.emnail_address.toLowerCase().indexOf(value) !== -1;
+                return index.province.name.toLowerCase().indexOf(value) !== -1 || index.city_municipality.toLowerCase().indexOf(value) !== -1 || index.drrm_officer.toLowerCase().indexOf(value) !== -1 || index.mobile_no.toLowerCase().indexOf(value) !== -1 || index.landline_no.toLowerCase().indexOf(value) !== -1 || index.emnail_address.toLowerCase().indexOf(value) !== -1;
                 index.radio_frequency.toLowerCase().indexOf(value) !== -1;
                 index.call_sign.toLowerCase().indexOf(value) !== -1;
             });
@@ -47007,7 +47014,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 if (resp.status === 200) {
                     var json = resp.body;
                     if (json.officers.length) {
-                        console.log(json);
                         self.$emit('populateofficer', json);
                     } else {
                         var rs = _.filter(self.provinces, { id: newVal });
@@ -47070,6 +47076,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -47095,6 +47103,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         'modal-update-officer': __WEBPACK_IMPORTED_MODULE_2__edit_officer_vue___default.a
     },
     methods: {
+        refreshData: function refreshData(resp) {
+            var self = this;
+            self.officers = resp.officers;
+        },
         syncOfficerChild: function syncOfficerChild(officer) {
             var self = this;
             self.childOfficer = officer;
@@ -47113,7 +47125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/officer/management').then(function (response) {
                 if (response.status === 200) {
                     var json = response.data;
-                    self.officers = json.officers;
+                    self.officers = response.data;
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -50979,9 +50991,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('officer-list', {
     attrs: {
       "provinces": _vm.provinces,
+      "city_municipalities": _vm.city_municipalities,
       "officers": _vm.officers
     },
     on: {
+      "populateofficer": _vm.refreshData,
       "syncofficerupdate": _vm.syncOfficerChild,
       "deletedofficer": _vm.removeOfficerChild
     }
@@ -51388,8 +51402,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v("\n            " + _vm._s(province.name) + "\n        ")])
   })], 2)]), _vm._v(" "), _c('table', {
     staticClass: "table-officers table table-hover table-bordered table-condensed"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.searchFilter), function(officer, index) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(officer.province))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.city_municipality))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.drrm_officer))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.mobile_no))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.landline_no))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.emnail_address))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.radio_frequency))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.call_sign))]), _vm._v(" "), _c('th', [_c('a', {
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.officers), function(officer, index) {
+    return _c('tr', [_c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(_vm.getProvinceName(officer)))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(_vm.getMunicipalityName(officer)))]), _vm._v(" "), _c('td', [_c('b', {
+      staticClass: "text-info"
+    }, [_vm._v(_vm._s(officer.drrm_officer))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(officer.emnail_address))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(officer.mobile_no))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(officer.landline_no))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(officer.radio_frequency))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_vm._v(_vm._s(officer.call_sign))]), _vm._v(" "), _c('th', [_c('a', {
       staticStyle: {
         "cursor": "pointer"
       },
@@ -51414,7 +51442,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })])])])
   }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Province")]), _vm._v(" "), _c('th', [_vm._v("City/Municipality")]), _vm._v(" "), _c('th', [_vm._v("DRRM Officer")]), _vm._v(" "), _c('th', [_vm._v("Mobile No.")]), _vm._v(" "), _c('th', [_vm._v("Landline No.")]), _vm._v(" "), _c('th', [_vm._v("Email Address")]), _vm._v(" "), _c('th', [_vm._v("Radio Frequency")]), _vm._v(" "), _c('th', [_vm._v("Call Sign")]), _vm._v(" "), _c('th', {
+  return _c('thead', [_c('tr', [_c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("Province")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("City/Municipality")]), _vm._v(" "), _c('th', [_vm._v("DRRM Officer")]), _vm._v(" "), _c('th', [_vm._v("Email Address")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("Mobile No.")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("Landline No.")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("Radio Frequency")]), _vm._v(" "), _c('th', {
+    staticClass: "text-center"
+  }, [_vm._v("Call Sign")]), _vm._v(" "), _c('th', {
     attrs: {
       "width": "1"
     }

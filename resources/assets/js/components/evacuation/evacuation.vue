@@ -128,6 +128,7 @@
                         if (resp.status === 200) {
                             let json = resp.body;
                             self.skip += 100;
+                            console.log(self.skip);
                             self.loadingMore = false;
                             for (var i = json.length - 1; i >= 0; i--) {
                                 self.evacuations.push(json[i]);

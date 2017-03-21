@@ -14,9 +14,11 @@
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
                 <officer-list
+                 @populateofficer="refreshData"
                  @syncofficerupdate="syncOfficerChild"
                  @deletedofficer="removeOfficerChild" 
                  :provinces="provinces"
+                 :city_municipalities="city_municipalities"
                  :officers="officers"></officer-list>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
@@ -55,6 +57,10 @@
             'modal-update-officer': CompModalEditOfficer
         },
         methods: {
+            refreshData(resp){
+                let self = this;
+                self.officers = resp.officers;
+            },
             syncOfficerChild(officer){
                 let self = this;
                 self.childOfficer = officer;
@@ -73,7 +79,7 @@
                 axios.get('/officer/management').then(function (response) {
                     if (response.status === 200) {
                         let json = response.data;
-                        self.officers = json.officers;
+                        self.officers = response.data;
                     }
                 }).catch(function (error) {
                     console.log(error);
