@@ -46098,6 +46098,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -46122,6 +46123,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         provinces: {
             type: Array
         }
+    },
+    data: function data() {
+        return {
+            whileLoadingData: true
+        };
     },
     mounted: function mounted() {
         setTimeout(function () {
@@ -46181,9 +46187,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__create_city_municipality___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__create_city_municipality__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__list_of_cities_vue__);
-//
-//
-//
 //
 //
 //
@@ -46926,6 +46929,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -46948,8 +46964,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     data: function data() {
         return {
+            whileExporting: false,
             search: '',
-            selectProvince: 0
+            selectProvince: 0,
+            selectCity: 0
         };
     },
 
@@ -46957,11 +46975,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'create-officer': __WEBPACK_IMPORTED_MODULE_0__create_officer_vue___default.a
     },
     methods: {
+        searchSQL: function searchSQL() {
+            var self = this;
+            self.$http.post('/officers/search', {
+                province: self.selectProvince,
+                city: self.selectCity,
+                search: self.search
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.$emit('populateofficer', json);
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
+        fetchDropDownLgus: function fetchDropDownLgus() {
+            var self = this;
+            self.$http.post('/municipality/filterby/province', {
+                province: self.selectProvince
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.$emit('populatecities', json.city_municipalities);
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
         getProvinceName: function getProvinceName(officer) {
-            return _.toArray(officer.province)[1];
+            var province = _.values(officer.province);
+            if (typeof province[1] === 'string') {
+                return province[1];
+            } else {
+                return '';
+            }
         },
         getMunicipalityName: function getMunicipalityName(officer) {
-            return _.toArray(officer.municipality)[2];
+            var municipality = _.values(officer.municipality);
+            if (typeof municipality[2] === 'string') {
+                return municipality[2];
+            } else {
+                return '';
+            }
         },
         editOfficer: function editOfficer(officer) {
             var self = this;
@@ -46997,8 +47057,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         searchFilter: function searchFilter() {
             var self = this;
             var value = self.search.toLowerCase();
+            var province = {},
+                city = {};
             return self.officers.filter(function (index) {
-                return index.province.name.toLowerCase().indexOf(value) !== -1 || index.city_municipality.toLowerCase().indexOf(value) !== -1 || index.drrm_officer.toLowerCase().indexOf(value) !== -1 || index.mobile_no.toLowerCase().indexOf(value) !== -1 || index.landline_no.toLowerCase().indexOf(value) !== -1 || index.emnail_address.toLowerCase().indexOf(value) !== -1;
+                province = self.getProvinceName(index);
+                city = self.getMunicipalityName(index);
+                return province.toLowerCase().indexOf(value) !== -1 || city.toLowerCase().indexOf(value) !== -1 || index.drrm_officer.toLowerCase().indexOf(value) !== -1 || index.mobile_no.toLowerCase().indexOf(value) !== -1 || index.landline_no.toLowerCase().indexOf(value) !== -1 || index.emnail_address.toLowerCase().indexOf(value) !== -1;
                 index.radio_frequency.toLowerCase().indexOf(value) !== -1;
                 index.call_sign.toLowerCase().indexOf(value) !== -1;
             });
@@ -47007,23 +47071,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     watch: {
         'selectProvince': function selectProvince(newVal) {
             var self = this;
-            var resource = self.$resource('/officers/filter/province{/id}');
-            resource.get({
-                id: newVal
-            }).then(function (resp) {
-                if (resp.status === 200) {
-                    var json = resp.body;
-                    if (json.officers.length) {
-                        self.$emit('populateofficer', json);
-                    } else {
-                        var rs = _.filter(self.provinces, { id: newVal });
-                        var province = rs.length > 0 ? rs[0].name : '-';
-                        __WEBPACK_IMPORTED_MODULE_1_alertify_js___default.a.alert('There was no officer found in, <b class="text-primary">' + province + '</b>');
-                    }
-                }
-            }, function (resp) {
-                console.log(resp);
-            });
+            self.fetchDropDownLgus(newVal);
+            self.searchSQL();
+        },
+        'selectCity': function selectCity(newVal) {
+            this.searchSQL();
         }
     }
 };
@@ -47043,6 +47095,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_officer_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__edit_officer_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_alertify_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_alertify_js__);
+//
+//
 //
 //
 //
@@ -47103,9 +47157,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         'modal-update-officer': __WEBPACK_IMPORTED_MODULE_2__edit_officer_vue___default.a
     },
     methods: {
-        refreshData: function refreshData(resp) {
+        refreshCities: function refreshCities(respCities) {
+            this.city_municipalities = respCities;
+        },
+        refreshData: function refreshData(respOfficers) {
             var self = this;
-            self.officers = resp.officers;
+            self.officers = respOfficers;
         },
         syncOfficerChild: function syncOfficerChild(officer) {
             var self = this;
@@ -50995,6 +51052,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "officers": _vm.officers
     },
     on: {
+      "populatecities": _vm.refreshCities,
       "populateofficer": _vm.refreshData,
       "syncofficerupdate": _vm.syncOfficerChild,
       "deletedofficer": _vm.removeOfficerChild
@@ -51394,15 +51452,76 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": 0
     }
-  }, [_vm._v("All")]), _vm._v(" "), _vm._l((_vm.provinces), function(province) {
+  }, [_vm._v("All Province")]), _vm._v(" "), _vm._l((_vm.provinces), function(province) {
     return _c('option', {
       domProps: {
         "value": province.id
       }
     }, [_vm._v("\n            " + _vm._s(province.name) + "\n        ")])
-  })], 2)]), _vm._v(" "), _c('table', {
+  })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2",
+    staticStyle: {
+      "padding": "20px"
+    }
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectCity),
+      expression: "selectCity"
+    }],
+    staticClass: "form-control ",
+    on: {
+      "change": function($event) {
+        _vm.selectCity = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        })[0]
+      }
+    }
+  }, [_c('option', {
+    domProps: {
+      "value": 0
+    }
+  }, [_vm._v("All lgu")]), _vm._v(" "), _vm._l((_vm.city_municipalities), function(city) {
+    return _c('option', {
+      domProps: {
+        "value": city.id
+      }
+    }, [_vm._v("\n            " + _vm._s(city.name) + "\n        ")])
+  })], 2)]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('a', {
+    staticClass: "pull-right",
+    staticStyle: {
+      "margin-top": "-16px",
+      "padding-right": "6px"
+    },
+    attrs: {
+      "href": "/officer/download"
+    }
+  }, [_c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.whileExporting),
+      expression: "!whileExporting"
+    }],
+    staticClass: "fa fa-download fa-2x",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.whileExporting),
+      expression: "whileExporting"
+    }],
+    staticClass: "fa fa-spinner fa-pulse fa-2x fa-fw text-warning"
+  })]), _vm._v(" "), _c('table', {
     staticClass: "table-officers table table-hover table-bordered table-condensed"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.officers), function(officer, index) {
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.searchFilter), function(officer, index) {
     return _c('tr', [_c('td', {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(_vm.getProvinceName(officer)))]), _vm._v(" "), _c('td', {
@@ -51442,6 +51561,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })])])])
   }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('a', {
+    staticClass: "pull-right",
+    staticStyle: {
+      "cursor": "pointer",
+      "margin-top": "-16px"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-print fa-2x"
+  }), _vm._v("    ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', {
     staticClass: "text-center"
   }, [_vm._v("Province")]), _vm._v(" "), _c('th', {

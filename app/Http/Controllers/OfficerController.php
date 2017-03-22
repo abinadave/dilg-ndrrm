@@ -7,10 +7,64 @@ use App\Officer as Officer;
 use Illuminate\Support\Facades\Auth;
 class OfficerController extends Controller
 {
-	public function filterBy($province_id){
-		return response()->json([
-			'officers' => Officer::where('province_id', $province_id)->get()
-		]);
+	public function search(Request $request){
+		$search = $request->input('search');
+		$province = $request->input('province');
+		$city = $request->input('city');
+		$resp = array();
+		if ($search == '') {
+			$resp = $this->filterBy($province, $city);
+		}else {
+			$resp = $this->advanceFilter($province, $city, $search);
+		}
+		return $resp;
+	}
+	private function advanceFilter($province, $city, $keyword){
+        $officers = array();
+        if ($province == 0 && $city == 0) {
+              $officers = Officer::where('drrm_officer', 'like', '%'. $keyword .'%')
+                    ->where(function($query) use ($keyword) {
+                        return $query->where('mobile_no', 'like', '%'. $keyword . '%')
+                            ->orWhere('landline_no', 'like', '%'. $keyword .'%')
+                            ->orWhere('emnail_address', 'like', '%'. $keyword .'%')
+                            ->orWhere('radio_frequency', 'like', '%'. $keyword .'%')
+                            ->orWhere('call_sign', 'like', '%'. $keyword .'%');
+                    })
+                    ->orderBy('id','desc')
+                    ->get();
+        	// echo "serach la";
+          }elseif($province != 0 && $city == 0){
+              
+          }elseif($province == 0 && $city != 0){
+             
+          }elseif($province != 0 && $city != 0){
+            
+          }
+        return $officers;
+    }
+	public function filterBy($province_id, $municipality_id){
+		$officers = array();
+		if ($province_id == 0 && $municipality_id == 0) {
+			$officers = Officer::with(['province','municipality'])
+			->orderBy('id','desc')
+			->get();
+		}else {
+			if ($province_id == 0 && $municipality_id != 0) {
+				$officers = Officer::with(['province','municipality'])
+				->where('municipality_id', $municipality_id)
+				->get();
+			}elseif($province_id != 0 && $municipality_id == 0){
+				$officers = Officer::with(['province','municipality'])
+				->where('province_id', $province_id)
+				->get();
+			}elseif($province_id != 0 && $municipality_id != 0){
+				$officers = Officer::with(['province','municipality'])
+				->where('province_id', $province_id)
+				->where('municipality_id', $municipality_id)
+				->get();
+			}
+		}
+		return $officers;
 	}
 	public function delete($id){
 		$deleted = false;

@@ -28,6 +28,7 @@
                     <td class="text-center">{{ countFacilities(city.id) }}</td>
                     <td class="text-center"><a @click="showTheLgus(city)" style="cursor: pointer; font-size: 15px"><i class="fa fa-folder" aria-hidden="true"></i></a></td>
         		</tr>
+               
         	</tbody>
         </table>
     </div>
@@ -58,6 +59,11 @@
     			type: Array
     		}
     	},
+        data(){
+            return {
+                whileLoadingData: true
+            }
+        },
         mounted() {
             setTimeout(function(){
                 $('#my-table').dataTable();

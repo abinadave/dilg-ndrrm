@@ -33,11 +33,8 @@
                                     :provinces="provinces">
                                 </create-city>
                             </div>
-                            
                           </div>
-
                         </div>
-                        
                     </div>
                 </div>
             </div>

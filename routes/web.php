@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('evacuations/download', 'EvacuationController@evacuationToExcel');
     Route::get('evacuations/export', 'EvacuationController@createExcelFile');
     Route::get('rescue/export', 'RescueController@export');
+    Route::get('officer/download', function(){
+        echo "Exporting..";
+    });
     Route::post('evacuation/skip/take', 'EvacuationController@scroll');
     Route::post('municipality/filterby/province', 'ProvinceController@getCities');
     Route::get('evacuations/filter/{pid}/{cit}', 'EvacuationController@filter');
@@ -44,4 +47,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('officer', 'OfficerController@insert');
     Route::delete('officer/{id}', 'OfficerController@delete');
     Route::get('officers/filter/province/{id}', 'OfficerController@filterBy');
+    Route::post('officers/search', 'OfficerController@search');
 });

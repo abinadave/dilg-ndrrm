@@ -14,12 +14,14 @@
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
                 <officer-list
+                 @populatecities="refreshCities"
                  @populateofficer="refreshData"
                  @syncofficerupdate="syncOfficerChild"
-                 @deletedofficer="removeOfficerChild" 
+                 @deletedofficer="removeOfficerChild"
                  :provinces="provinces"
                  :city_municipalities="city_municipalities"
-                 :officers="officers"></officer-list>
+                 :officers="officers"
+                 ></officer-list>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
                 <create-officer @addedofficer="newChildOfficer"></create-officer>
@@ -57,9 +59,12 @@
             'modal-update-officer': CompModalEditOfficer
         },
         methods: {
-            refreshData(resp){
+            refreshCities(respCities){
+                this.city_municipalities = respCities;
+            },
+            refreshData(respOfficers){
                 let self = this;
-                self.officers = resp.officers;
+                self.officers = respOfficers;
             },
             syncOfficerChild(officer){
                 let self = this;

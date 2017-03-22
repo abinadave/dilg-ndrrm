@@ -5,12 +5,25 @@
       </div>
       <div class="col-md-2" style="padding: 20px">
         <select v-model="selectProvince" class="form-control ">
-            <option :value="0">All</option>
+            <option :value="0">All Province</option>
             <option :value="province.id" v-for="province in provinces">
                 {{ province.name }}
             </option>
         </select>
       </div>
+      <div class="col-md-2" style="padding: 20px">
+         <select v-model="selectCity" class="form-control ">
+            <option :value="0">All lgu</option>
+            <option :value="city.id" v-for="city in city_municipalities">
+                {{ city.name }}
+            </option>
+        </select>
+      </div>
+      <a style="cursor:pointer; margin-top: -16px" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a style="margin-top: -16px; padding-right: 6px" href="/officer/download" class="pull-right">
+              <i v-show="!whileExporting" class="fa fa-download fa-2x" aria-hidden="true"></i> 
+              <i v-show="whileExporting" class="fa fa-spinner fa-pulse fa-2x fa-fw text-warning"></i>
+            </a>
        <table class="table-officers table table-hover table-bordered table-condensed">
            <thead>
                <tr>
@@ -27,7 +40,7 @@
                </tr>
            </thead>
            <tbody>
-              <tr v-for="(officer, index) in officers">
+              <tr v-for="(officer, index) in searchFilter">
                   <td class="text-center">{{ getProvinceName(officer) }}</td>
                   <td class="text-center">{{ getMunicipalityName(officer) }}</td>
                   <td><b class="text-info">{{ officer.drrm_officer }}</b></td>
@@ -78,19 +91,63 @@
         },
         data(){
             return {
+                whileExporting: false,
                 search: '',
-                selectProvince: 0
+                selectProvince: 0,
+                selectCity: 0
             }
         },
         components: {
             'create-officer': CompCreateOfficer
         },
         methods: {
+            searchSQL(){
+                let self = this;
+                self.$http.post('/officers/search', {
+                    province: self.selectProvince,
+                    city: self.selectCity,
+                    search: self.search
+                }).then((resp) => {
+                    if (resp.status === 200) {
+                        let json = resp.body;
+                        self.$emit('populateofficer', json);
+                    }
+                }, (resp) => {
+                    if (resp.status === 422) {
+                      console.log(resp)
+                    }
+                });
+            },
+            fetchDropDownLgus(){
+                let self = this;
+                self.$http.post('/municipality/filterby/province',  {
+                  province: self.selectProvince
+                }).then((resp) => {
+                    if (resp.status === 200) {
+                        let json = resp.body;
+                        self.$emit('populatecities', json.city_municipalities);
+                    }
+                }, (resp) => {
+                    if (resp.status === 422) {
+                      console.log(resp)
+                    }
+                });
+            },
             getProvinceName(officer){
-                return _.toArray(officer.province)[1];
+                let province = _.values(officer.province);
+                if (typeof province[1] === 'string') {
+                    return province[1];
+                }else {
+                    return '';
+                }
             },
             getMunicipalityName(officer){
-                return _.toArray(officer.municipality)[2];
+                let municipality = _.values(officer.municipality);
+                if (typeof municipality[2] === 'string') {
+                    return municipality[2];
+                }else {
+                    return '';
+                }
             },
             editOfficer(officer){
                 let self = this;
@@ -126,9 +183,12 @@
             searchFilter(){
                 let self = this;
                 let value = self.search.toLowerCase();
+                let province = {}, city = {};
                 return self.officers.filter(function(index) {
-                    return index.province.name.toLowerCase().indexOf(value) !== -1 ||
-                           index.city_municipality.toLowerCase().indexOf(value) !== -1 ||
+                    province = self.getProvinceName(index);
+                    city = self.getMunicipalityName(index);
+                    return province.toLowerCase().indexOf(value) !== -1 ||
+                           city.toLowerCase().indexOf(value) !== -1 ||
                            index.drrm_officer.toLowerCase().indexOf(value) !== -1 ||
                            index.mobile_no.toLowerCase().indexOf(value) !== -1 || 
                            index.landline_no.toLowerCase().indexOf(value) !== -1 || 
@@ -141,23 +201,11 @@
         watch: {
             'selectProvince': function(newVal){
                 let self = this;
-                let resource = self.$resource('/officers/filter/province{/id}');
-                resource.get({
-                    id: newVal
-                }).then((resp) => {
-                    if (resp.status === 200) {
-                        let json = resp.body;
-                        if (json.officers.length) {
-                            self.$emit('populateofficer', json);
-                        }else {
-                            let rs = _.filter(self.provinces, {id: newVal});
-                            let province = (rs.length > 0) ? rs[0].name : '-';
-                            alertify.alert('There was no officer found in, <b class="text-primary">' +province+'</b>');
-                        }
-                    }
-                }, (resp) => {
-                    console.log(resp);
-                })
+                self.fetchDropDownLgus(newVal);
+                self.searchSQL();
+            },
+            'selectCity': function(newVal){
+                this.searchSQL();
             }
         }
     }
