@@ -7,6 +7,26 @@ use App\Officer as Officer;
 use Illuminate\Support\Facades\Auth;
 class OfficerController extends Controller
 {
+	public function update(Request $request){
+		echo 'drrm officer: ' . $request->input('drrm_officer') . '<br>';
+		echo 'province_id: ' . $request->input('province_id') . '<br>';
+		echo 'city: ' . $request->input('municipality_id') . '<br>';
+		echo 'mobile_no: ' . $request->input('mobile_no') . '<br>';
+		echo 'email: ' . $request->input('emnail_address') . '<br>';
+		echo 'radio_frequency: ' . $request->input('radio_frequency') . '<br>';
+		echo 'call_sign: ' . $request->input('call_sign') . '<br>';
+		// $id = $request->input('id');
+		// $count = Officer::where('id', $id)->count();
+		// if ($count > 0) {
+		// 	$officer = Officer::findOrFail($id);
+		// 	$officer->drrm_officer = $request->input('drrm_officer');
+		// 	$officer->province_id = $request->input('province_id');
+		// }
+	}
+	public function export(){
+        $officers =  Officer::where('province_id', '>=', '1')->where('municipality_id', '>=', '1')->get();
+        return view('excel.export-officer')->with(compact('officers'));       
+	}
 	public function search(Request $request){
 		$search = $request->input('search');
 		$province = $request->input('province');

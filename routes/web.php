@@ -21,14 +21,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => ['auth']], function () {
+    Route::put('officer', 'OfficerController@update');
+    Route::post('facility/fetch', 'FacilityController@fetch');
     Route::post('rescue/filterby/dropdown', 'RescueController@filter');
     Route::post('rescue/search', 'RescueController@searchOnly');
     Route::get('evacuations/download', 'EvacuationController@evacuationToExcel');
     Route::get('evacuations/export', 'EvacuationController@createExcelFile');
     Route::get('rescue/export', 'RescueController@export');
-    Route::get('officer/download', function(){
-        echo "Exporting..";
-    });
+    Route::get('officer/download', 'OfficerController@export');
+    Route::get('facility/download', 'FacilityController@export');
     Route::post('evacuation/skip/take', 'EvacuationController@scroll');
     Route::post('municipality/filterby/province', 'ProvinceController@getCities');
     Route::get('evacuations/filter/{pid}/{cit}', 'EvacuationController@filter');

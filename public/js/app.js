@@ -45864,22 +45864,103 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
     data: function data() {
         return {
             facilities: [], search: '',
-            searching: false
+            searching: false,
+            provinces: [],
+            city_municipalities: [],
+            selectedProvince: 0,
+            selectedCity: 0,
+            whileExporting: false
         };
     },
     mounted: function mounted() {
         console.log('Facility.vue is mounted');
         this.fetch();
+        this.fetchCityMunicipalities();
     },
 
     components: {},
     methods: {
+        downloadNow: function downloadNow() {
+            var alertify = __webpack_require__(7);
+            alertify.log('Please wait, Your document is being downloaded!');
+        },
+        fetchLgus: function fetchLgus() {
+            var self = this;
+            self.$http.post('/municipality/filterby/province', {
+                province: self.selectedProvince
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.city_municipalities = json.city_municipalities;
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
+        getProvinceName: function getProvinceName(facility) {
+            var province = _.values(facility.province);
+            if (typeof province[1] === 'string') {
+                return province[1];
+            } else {
+                return '';
+            }
+        },
+        getMunicipalityName: function getMunicipalityName(facility) {
+            var municipality = _.values(facility.municipality);
+            if (typeof municipality[2] === 'string') {
+                return municipality[2];
+            } else {
+                return '';
+            }
+        },
+        fetchCityMunicipalities: function fetchCityMunicipalities() {
+            var self = this;
+            self.$http.get('/province/management').then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.provinces = json.provinces;
+                    self.city_municipalities = json.city_municipalities;
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
         changeinKeyword: function changeinKeyword() {
             var self = this;
             clearTimeout(self.timer);
@@ -45906,15 +45987,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         fetch: function fetch() {
             var self = this;
-            axios.post('/facility/management', {
-                pagination: self.pagination
-
-            }).then(function (response) {
-                if (response.status === 200) {
-                    self.facilities = response.data.facilities;
+            self.$http.post('/facility/fetch', {
+                search: self.search,
+                province: self.selectedProvince,
+                city: self.selectedCity
+            }).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    self.facilities = json;
                 }
-            }).catch(function (error) {
-                console.log(error);
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
             });
         }
     },
@@ -45925,6 +46010,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return self.facilities.filter(function (index) {
                 return index.evacuation_center.toLowerCase().indexOf(value) !== -1;
             });
+        }
+    },
+    watch: {
+        'selectedProvince': function selectedProvince(newVal) {
+            this.fetch();
+            this.fetchLgus();
+        },
+        'selectedCity': function selectedCity(newVal) {
+            this.fetch();
+        },
+        'search': function search(newVal) {
+            var self = this;
+            clearTimeout(self.timer);
+            self.timer = setTimeout(function () {
+                if (newVal === '') {
+                    self.fetch();
+                }
+            }, 1000);
         }
     }
 };
@@ -46681,12 +46784,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
 //
 //
 //
@@ -46788,6 +46888,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
     methods: {
+        updateOfficer: function updateOfficer() {
+            var self = this;
+            $.each(self.officer, function (index, val) {
+                console.log(index + ': ' + val);
+            });
+            self.$http.put('/officer', self.officer).then(function (resp) {
+                if (resp.status === 200) {
+                    var json = resp.body;
+                    console.log(json);
+                }
+            }, function (resp) {
+                if (resp.status === 422) {
+                    console.log(resp);
+                }
+            });
+        },
         fetch: function fetch() {
             var self = this;
             self.$http.get('/province/management').then(function (resp) {
@@ -46805,6 +46921,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     computed: {}
 };
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
 /* 52 */
@@ -46975,6 +47092,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'create-officer': __WEBPACK_IMPORTED_MODULE_0__create_officer_vue___default.a
     },
     methods: {
+        printTbl: function printTbl() {
+            var self = this;
+            console.log('printing');
+        },
+        downloadNow: function downloadNow() {
+            var self = this;
+            __WEBPACK_IMPORTED_MODULE_1_alertify_js___default.a.success("Please wait, your document is being downloaded.");
+        },
         searchSQL: function searchSQL() {
             var self = this;
             self.$http.post('/officers/search', {
@@ -47095,8 +47220,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_officer_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__edit_officer_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_alertify_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_alertify_js__);
-//
-//
 //
 //
 //
@@ -50676,13 +50799,69 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_c('h3', {
-    staticClass: "panel-title"
-  }, [_vm._v("Facilities " + _vm._s(_vm.facilities.length))])]), _vm._v(" "), _c('div', {
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
-  }, [_c('input', {
+  }, [_c('div', {
+    staticClass: "col-md-2"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedProvince),
+      expression: "selectedProvince"
+    }],
+    staticClass: "form-control ",
+    on: {
+      "change": function($event) {
+        _vm.selectedProvince = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        })[0]
+      }
+    }
+  }, [_c('option', {
+    domProps: {
+      "value": 0
+    }
+  }, [_vm._v("All Province")]), _vm._v(" "), _vm._l((_vm.provinces), function(province) {
+    return _c('option', {
+      domProps: {
+        "value": province.id
+      }
+    }, [_vm._v("\n                    " + _vm._s(province.name) + "\n                ")])
+  })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-2"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.selectedCity),
+      expression: "selectedCity"
+    }],
+    staticClass: "form-control ",
+    on: {
+      "change": function($event) {
+        _vm.selectedCity = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        })[0]
+      }
+    }
+  }, [_c('option', {
+    domProps: {
+      "value": 0
+    }
+  }, [_vm._v("All lgu")]), _vm._v(" "), _vm._l((_vm.city_municipalities), function(city) {
+    return _c('option', {
+      domProps: {
+        "value": city.id
+      }
+    }, [_vm._v("\n                    " + _vm._s(city.name) + "\n                ")])
+  })], 2)]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -50704,10 +50883,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": _vm._s(_vm.search)
     },
     on: {
-      "keyup": [_vm.changeinKeyword, function($event) {
+      "keyup": function($event) {
         if (_vm._k($event.keyCode, "enter", 13)) { return; }
-        _vm.searchKeyword($event)
-      }],
+        _vm.fetch($event)
+      },
       "input": function($event) {
         if ($event.target.composing) { return; }
         _vm.search = $event.target.value
@@ -50722,15 +50901,141 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "disabled": _vm.searching
     },
     on: {
-      "click": _vm.searchKeyword
+      "click": _vm.fetch
     }
-  }, [_vm._v("Search")]), _vm._v(" "), _c('table', {
-    staticClass: "table table-hover table-condensed table-bordered"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.facilities), function(facility) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(facility.facility_category))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.facility_description))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.location))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.total_facility))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.person_responsible))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.mobile_no))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.landline_no))])])
+  }, [_vm._v("Search")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c('a', {
+    staticClass: "pull-right",
+    staticStyle: {
+      "margin-top": "-16px",
+      "padding-right": "6px"
+    },
+    attrs: {
+      "href": "/facility/download"
+    },
+    on: {
+      "click": _vm.downloadNow
+    }
+  }, [_c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.whileExporting),
+      expression: "!whileExporting"
+    }],
+    staticClass: "fa fa-download fa-2x",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('i', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.whileExporting),
+      expression: "whileExporting"
+    }],
+    staticClass: "fa fa-spinner fa-pulse fa-2x fa-fw text-warning"
+  })]), _vm._v(" "), _c('table', {
+    staticClass: "table table-hover table-condensed table-bordered",
+    staticStyle: {
+      "font-size": "12px"
+    }
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.facilities), function(facility) {
+    return _c('tr', [_c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(_vm.getProvinceName(facility)))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(_vm.getMunicipalityName(facility)))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.facility_category))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.facility_description))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.location))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.total_facility))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.person_responsible))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.mobile_no))]), _vm._v(" "), _c('td', {
+      staticStyle: {
+        "text-align": "center"
+      }
+    }, [_vm._v(_vm._s(facility.landline_no))])])
   }))])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', [_vm._v("Facility Cateogory")]), _vm._v(" "), _c('th', [_vm._v("Facility Description")]), _vm._v(" "), _c('th', [_vm._v("Location")]), _vm._v(" "), _c('th', [_vm._v("Total Facility")]), _vm._v(" "), _c('th', [_vm._v("Person Responsible")]), _vm._v(" "), _c('th', [_vm._v("Mobile No.")]), _vm._v(" "), _c('th', [_vm._v("Landline No.")])])])
+  return _c('div', {
+    staticClass: "panel-heading"
+  }, [_c('h3', {
+    staticClass: "panel-title"
+  }, [_vm._v("Facilities")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('a', {
+    staticClass: "pull-right",
+    staticStyle: {
+      "cursor": "pointer",
+      "margin-top": "-16px"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-print fa-2x"
+  }), _vm._v("    ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', {
+    staticStyle: {
+      "text-align": "center"
+    },
+    attrs: {
+      "width": "200"
+    }
+  }, [_vm._v("Province")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    },
+    attrs: {
+      "width": "200"
+    }
+  }, [_vm._v("City/Municipality")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    },
+    attrs: {
+      "width": "200"
+    }
+  }, [_vm._v("Facility Cateogory")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    },
+    attrs: {
+      "width": "250"
+    }
+  }, [_vm._v("Facility Description")]), _vm._v(" "), _c('th', [_vm._v("Location")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    }
+  }, [_vm._v("Total Facility")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    }
+  }, [_vm._v("Person Responsible")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    }
+  }, [_vm._v("Mobile No.")]), _vm._v(" "), _c('th', {
+    staticStyle: {
+      "text-align": "center"
+    }
+  }, [_vm._v("Landline No.")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -51491,14 +51796,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": city.id
       }
     }, [_vm._v("\n            " + _vm._s(city.name) + "\n        ")])
-  })], 2)]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('a', {
+  })], 2)]), _vm._v(" "), _c('a', {
     staticClass: "pull-right",
     staticStyle: {
-      "margin-top": "-16px",
-      "padding-right": "6px"
+      "cursor": "pointer"
     },
+    on: {
+      "click": _vm.printTbl
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-print fa-2x"
+  }), _vm._v("    ")]), _vm._v(" "), _c('a', {
+    staticClass: "pull-right",
     attrs: {
       "href": "/officer/download"
+    },
+    on: {
+      "click": _vm.downloadNow
     }
   }, [_c('i', {
     directives: [{
@@ -51521,7 +51835,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "fa fa-spinner fa-pulse fa-2x fa-fw text-warning"
   })]), _vm._v(" "), _c('table', {
     staticClass: "table-officers table table-hover table-bordered table-condensed"
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.searchFilter), function(officer, index) {
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.searchFilter), function(officer, index) {
     return _c('tr', [_c('td', {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(_vm.getProvinceName(officer)))]), _vm._v(" "), _c('td', {
@@ -51561,16 +51875,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })])])])
   }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('a', {
-    staticClass: "pull-right",
-    staticStyle: {
-      "cursor": "pointer",
-      "margin-top": "-16px"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-print fa-2x"
-  }), _vm._v("    ")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', {
     staticClass: "text-center"
   }, [_vm._v("Province")]), _vm._v(" "), _c('th', {
@@ -51958,11 +52262,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "modal-content"
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "modal-header"
+  }, [_vm._m(0), _vm._v(" "), _c('h4', {
+    staticClass: "modal-title",
+    attrs: {
+      "id": "myModalLabel"
+    }
+  }, [_vm._v("Update officer " + _vm._s(_vm.officer.drrm_officer))])]), _vm._v(" "), _c('div', {
     staticClass: "modal-body"
   }, [_c('div', {
     staticClass: "panel-body"
-  }, [_c('form', [_c('div', {
+  }, [_c('div', {
     class: {
       'form-group col-md-5': true, 'has-error': _vm.errors.drrm_officer
     }
@@ -52192,36 +52503,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.officer.call_sign = $event.target.value
       }
     }
-  })]), _vm._v(" "), _vm._m(1)])]), _vm._v(" "), _vm._m(2)])])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "modal-header"
-  }, [_c('button', {
-    staticClass: "close",
-    attrs: {
-      "type": "button",
-      "data-dismiss": "modal",
-      "aria-label": "Close"
-    }
-  }, [_c('span', {
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }, [_vm._v("×")])]), _vm._v(" "), _c('h4', {
-    staticClass: "modal-title",
-    attrs: {
-      "id": "myModalLabel"
-    }
-  }, [_vm._v("Modal title")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('button', {
-    staticClass: "btn btn-block btn-success",
-    attrs: {
-      "type": "submit"
-    }
-  }, [_vm._v("Add Officer")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  })])]), _vm._v(" "), _c('div', {
     staticClass: "modal-footer"
   }, [_c('button', {
     staticClass: "btn btn-default",
@@ -52232,9 +52514,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Close")]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-primary",
     attrs: {
-      "type": "button"
+      "type": "submit"
+    },
+    on: {
+      "click": _vm.updateOfficer
     }
-  }, [_vm._v("Save changes")])])
+  }, [_vm._v("Save changes")])])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "close",
+    attrs: {
+      "type": "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  }, [_c('span', {
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

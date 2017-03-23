@@ -5,11 +5,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          <h4 class="modal-title" id="myModalLabel">Update officer {{ officer.drrm_officer }}</h4>
         </div>
         <div class="modal-body">
              <div class="panel-body">
-                 <form>
+                
                     <div :class="{'form-group col-md-5': true, 'has-error': errors.drrm_officer }">
                       <label class="control-label" for="inputWarning1">RDRRM Officer</label>
                       <input v-model="officer.drrm_officer" type="text" class="form-control" id="inputWarning1">
@@ -50,14 +50,11 @@
                       <label class="control-label" for="inputWarning1">Call sign</label>
                       <input v-model="officer.call_sign" type="text" class="form-control" id="inputWarning1">
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-block btn-success">Add Officer</button>
-                    </div>
-                </form>
+                   
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button @click="updateOfficer" type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -102,6 +99,22 @@
         },
      
         methods: {
+            updateOfficer(){
+                let self = this;
+                $.each(self.officer, function(index, val) {
+                   console.log(index + ': ' + val)
+                });
+                self.$http.put('/officer', self.officer).then((resp) => {
+                    if (resp.status === 200) {
+                        let json = resp.body;
+                        console.log(json);
+                    }
+                }, (resp) => {
+                    if (resp.status === 422) {
+                      console.log(resp)
+                    }
+                });
+            },
             fetch(){
                 let self = this;
                 self.$http.get('/province/management').then((resp) => {

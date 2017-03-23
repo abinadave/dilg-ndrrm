@@ -14,4 +14,8 @@ class CityMunicipality extends Model
     {
         return $this->hasMany('App\Officer');
     }
+    public function facility()
+    {
+        return $this->hasMany('App\Facility');
+    }
 }

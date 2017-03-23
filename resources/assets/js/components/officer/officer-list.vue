@@ -19,8 +19,8 @@
             </option>
         </select>
       </div>
-      <a style="cursor:pointer; margin-top: -16px" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a style="margin-top: -16px; padding-right: 6px" href="/officer/download" class="pull-right">
+      <a  @click="printTbl" style="cursor:pointer" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a @click="downloadNow" href="/officer/download" class="pull-right">
               <i v-show="!whileExporting" class="fa fa-download fa-2x" aria-hidden="true"></i> 
               <i v-show="whileExporting" class="fa fa-spinner fa-pulse fa-2x fa-fw text-warning"></i>
             </a>
@@ -101,6 +101,14 @@
             'create-officer': CompCreateOfficer
         },
         methods: {
+            printTbl(){
+                let self = this;
+                console.log('printing');
+            },
+            downloadNow(){
+                let self = this;
+                alertify.success("Please wait, your document is being downloaded.");
+            },
             searchSQL(){
                 let self = this;
                 self.$http.post('/officers/search', {
