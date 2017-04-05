@@ -8,6 +8,7 @@ class Officer extends Model
 {
     protected $table = 'officers';
     protected $primaryKey = 'id';
+    public $timestamps = false;
     
     public function province(){
     	return $this->belongsTo('App\Province');

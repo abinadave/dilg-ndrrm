@@ -16,7 +16,7 @@
                     </div>
                     <div :class="{'form-group col-md-5': true, 'has-error': errors.province }">
                       <label class="control-label" for="inputWarning1">Province</label>
-                      <select class="form-control">
+                      <select class="form-control" v-model="officer.province_id">
                           <option :value="province.id" v-for="province in provinces">
                               {{ province.name }}
                           </option>
@@ -24,7 +24,7 @@
                     </div>
                     <div :class="{'form-group col-md-5': true, 'has-error': errors.city_municipality }">
                       <label class="control-label" for="inputWarning1">City/Municipality</label>
-                      <select v-model="cityMunicipality" class="form-control">
+                      <select v-model="officer.municipality_id" class="form-control">
                           <option :value="city.id" v-for="city in city_municipalities">
                               {{ city.name }}
                           </option>
@@ -54,7 +54,12 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button @click="updateOfficer" type="submit" class="btn btn-primary">Save changes</button>
+          <button :disabled="whileUpdating" @click="updateOfficer" type="submit" class="btn btn-primary">
+          <span v-if="whileUpdating">Please Wait... <i class="fa fa-spinner fa-pulse fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+          </span>
+          <span v-else>Save changes</span>
+          </button>
         </div>
       </div>
     </div>
@@ -94,22 +99,29 @@
                     mobile_no: false,
                     radio_frequency: false,
                     call_sign: false
-                }
+                },
+                whileUpdating: false
             }
         },
      
         methods: {
             updateOfficer(){
                 let self = this;
-                $.each(self.officer, function(index, val) {
-                   console.log(index + ': ' + val)
-                });
+                self.whileUpdating = true;
                 self.$http.put('/officer', self.officer).then((resp) => {
                     if (resp.status === 200) {
                         let json = resp.body;
-                        console.log(json);
+                        if (json.updated) {
+                            let alertify = require('alertify.js');
+                            alertify.success('Officer ['+ self.officer.drrm_officer+ '] successfully updated.');
+                            setTimeout(function(){
+                              self.whileUpdating = false;
+                              $('#modalEditOfficer').modal('hide');
+                            }, 700);
+                        }
                     }
                 }, (resp) => {
+                    self.whileUpdating = false;
                     if (resp.status === 422) {
                       console.log(resp)
                     }
@@ -130,8 +142,10 @@
                 });
             }
         },
-        computed: {
-            
+        watch: {
+            'form.province_id': function(){
+                console.log('changed')
+            }
         }
     }
 </script>

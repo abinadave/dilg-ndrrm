@@ -317,6 +317,7 @@ class ComposerStaticInit93f3cdb5c8f31d50bb363b873cdb2981
         'AddColumnProvinceCityEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_07_093532_add_column_province_city_evacuations_table.php',
         'AddColumnProvinceIDCityIDPrimaryKeyIdOfficersTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_07_114232_add_column_provinceID_cityID_primary_key_id_officers_table.php',
         'AddColumnProvinceIdCityIdFacilitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_07_104650_add_column_province_id_city_id_facilities_table.php',
+        'AddColumnTimestampsOffiersTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_24_084342_add_column_timestamps_offiers_table.php',
         'AddColumnTotalCapacityEvacuationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_27_161840_add_column_total_capacity_evacuations_table.php',
         'AddTimestampColumnOfficers' => __DIR__ . '/../..' . '/database/migrations/2017_03_06_140248_add_timestamp_column_officers.php',
         'CreateCityMunicipalitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_06_080506_create_city_municipalities_table.php',

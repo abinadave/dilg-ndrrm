@@ -8,20 +8,22 @@ use Illuminate\Support\Facades\Auth;
 class OfficerController extends Controller
 {
 	public function update(Request $request){
-		echo 'drrm officer: ' . $request->input('drrm_officer') . '<br>';
-		echo 'province_id: ' . $request->input('province_id') . '<br>';
-		echo 'city: ' . $request->input('municipality_id') . '<br>';
-		echo 'mobile_no: ' . $request->input('mobile_no') . '<br>';
-		echo 'email: ' . $request->input('emnail_address') . '<br>';
-		echo 'radio_frequency: ' . $request->input('radio_frequency') . '<br>';
-		echo 'call_sign: ' . $request->input('call_sign') . '<br>';
-		// $id = $request->input('id');
-		// $count = Officer::where('id', $id)->count();
-		// if ($count > 0) {
-		// 	$officer = Officer::findOrFail($id);
-		// 	$officer->drrm_officer = $request->input('drrm_officer');
-		// 	$officer->province_id = $request->input('province_id');
-		// }
+		$id = $request->input('id');
+		$count = Officer::where('id', $id)->count();
+		if ($count > 0) {
+			$officer = Officer::findOrFail($id);
+			$officer->drrm_officer = $request->input('drrm_officer');
+			$officer->province_id = $request->input('province_id');
+			$officer->municipality_id = $request->input('municipality_id');
+			$officer->mobile_no = $request->input('mobile_no');
+			$officer->emnail_address = $request->input('emnail_address');
+			$officer->radio_frequency = $request->input('radio_frequency');
+			$officer->call_sign = $request->input('call_sign');
+			$rs = $officer->save();
+			return response()->json([
+				'updated' => $rs
+			]);
+		}
 	}
 	public function export(){
         $officers =  Officer::where('province_id', '>=', '1')->where('municipality_id', '>=', '1')->get();

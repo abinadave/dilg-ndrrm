@@ -19,11 +19,12 @@
             </option>
         </select>
       </div>
-      <a  @click="printTbl" style="cursor:pointer" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a  @click="printTbl" style="cursor:pointer; margin-left: 10px" class="pull-right"><i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;&nbsp;&nbsp;</a>
             <a @click="downloadNow" href="/officer/download" class="pull-right">
               <i v-show="!whileExporting" class="fa fa-download fa-2x" aria-hidden="true"></i> 
               <i v-show="whileExporting" class="fa fa-spinner fa-pulse fa-2x fa-fw text-warning"></i>
             </a>
+            <button class="pull-right btn btn-xs btn-default" style="margin-left: 10px">add new</button>
        <table class="table-officers table table-hover table-bordered table-condensed">
            <thead>
                <tr>
@@ -35,7 +36,6 @@
                    <th class="text-center">Landline No.</th>
                    <th class="text-center">Radio Frequency</th>
                    <th class="text-center">Call Sign</th>
-                   <th width="1"></th>
                    <th width="1"></th>
                </tr>
            </thead>
@@ -49,7 +49,6 @@
                   <td class="text-center">{{ officer.landline_no }}</td>
                   <td class="text-center">{{ officer.radio_frequency }}</td>
                   <td class="text-center">{{ officer.call_sign }}</td>
-                  <th><a style="cursor: pointer" @click="removeOfficer(officer, index)"><span class="glyphicon glyphicon-remove"></span></a></th>
                   <th><a style="cursor: pointer" @click="editOfficer(officer, index)"><span class="glyphicon glyphicon-pencil"></span></a>
               </tr>
            </tbody>
